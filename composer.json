@@ -1,0 +1,29 @@
+{
+  "name": "fruit/compilekit",
+  "description": "Helper to generate anonymous class for Fruit Framework",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Ronmi Ren",
+      "email": "ronmi.ren@gmail.com"
+    }
+  ],
+  "require-dev": {
+    "phpunit/phpunit": "~6",
+    "squizlabs/php_codesniffer": "*",
+    "phploc/phploc": "*",
+    "pdepend/pdepend": "*",
+    "phpmd/phpmd": "*",
+    "sebastian/phpcpd": "*"
+  },
+  "require": {
+    "php": "^7"
+  },
+  "extra": { "branch-alias": { "dev-master": "0.2-dev" } },
+  "autoload": {
+    "psr-4": {
+      "Fruit\\CompileKit\\": "src",
+      "FruitTest\\CompileKit\\": "test"
+    }
+  }
+}
