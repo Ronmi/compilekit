@@ -10,7 +10,7 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
     {
         $f = new UserFunction();
         $expect = 'function () {}';
-        $actual = $f->__toString();
+        $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }
 
@@ -20,13 +20,13 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
             ->line('$x = 1;')
             ->block(['return $x;']);
         $expect = 'function () {$x = 1;return $x;}';
-        $actual = $f->__toString();
+        $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }
 
     public function testBodyPrettier()
     {
-        $f = (new Userfunction('', true))
+        $f = (new Userfunction())
             ->line('$x = 1;')
             ->block(['return $x;']);
         $expect = 'function ()
@@ -34,7 +34,7 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
     $x = 1;
     return $x;
 }';
-        $actual = $f->__toString();
+        $actual = $f->render(true);
         $this->assertEquals($expect, $actual);
     }
 
@@ -42,7 +42,7 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
     {
         $f = new Userfunction('f');
         $expect = 'function f() {}';
-        $actual = $f->__toString();
+        $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }
 
@@ -55,7 +55,7 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
             ->arg('$arg4', '', 'null')
             ->arg('arg5', 'string', '"test"');
         $expect = 'function ($arg1, $arg2, string $arg3, $arg4 = null, string $arg5 = "test") {}';
-        $actual = $f->__toString();
+        $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }
 
@@ -64,7 +64,7 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
         $f = (new Userfunction())
             ->return('string');
         $expect = 'function (): string {}';
-        $actual = $f->__toString();
+        $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }
 }

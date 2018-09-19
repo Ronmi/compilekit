@@ -8,12 +8,10 @@ class UserFunction
     private $args = [];
     private $returnType = '';
     private $body = [];
-    private $pretty;
 
-    public function __construct(string $name = '', bool $pretty = false)
+    public function __construct(string $name = '')
     {
         $this->name = $name;
-        $this->pretty = $pretty;
     }
 
     public function arg(string $name, string $type = '', string $default = ''): UserFunction
@@ -58,7 +56,7 @@ class UserFunction
         return $this;
     }
 
-    public function __toString(): string
+    public function render(bool $pretty = false): string
     {
         $ret = $this->returnType;
         if ($this->returnType !== '') {
@@ -70,13 +68,13 @@ class UserFunction
             $this->name,
             implode(', ', $this->args),
             $ret,
-            $this->renderBody()
+            $this->renderBody($pretty)
         );
     }
 
-    private function renderBody(): string
+    private function renderBody(bool $pretty): string
     {
-        if (!$this->pretty) {
+        if (!$pretty) {
             return ' {' . implode('', $this->body) . '}';
         }
 

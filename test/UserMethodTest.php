@@ -12,13 +12,13 @@ class UserMethodTest extends \PHPUnit\Framework\TestCase
             ->line('$x = 1;')
             ->block(['return $x;']);
         $expect = 'public function f() {$x = 1;return $x;}';
-        $actual = $f->__toString();
+        $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }
 
     public function testBodyPrettier()
     {
-        $f = (new UserMethod('f', 'public', false, true))
+        $f = (new UserMethod('f', 'public', false))
             ->line('$x = 1;')
             ->block(['return $x;']);
         $expect = 'public function f()
@@ -26,7 +26,7 @@ class UserMethodTest extends \PHPUnit\Framework\TestCase
     $x = 1;
     return $x;
 }';
-        $actual = $f->__toString();
+        $actual = $f->render(true);
         $this->assertEquals($expect, $actual);
     }
 
@@ -39,7 +39,7 @@ class UserMethodTest extends \PHPUnit\Framework\TestCase
             ->arg('$arg4', '', 'null')
             ->arg('arg5', 'string', '"test"');
         $expect = 'public function f($arg1, $arg2, string $arg3, $arg4 = null, string $arg5 = "test") {}';
-        $actual = $f->__toString();
+        $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }
 
@@ -48,7 +48,7 @@ class UserMethodTest extends \PHPUnit\Framework\TestCase
         $f = (new UserMethod('f'))
             ->return('string');
         $expect = 'public function f(): string {}';
-        $actual = $f->__toString();
+        $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }
 
@@ -57,7 +57,7 @@ class UserMethodTest extends \PHPUnit\Framework\TestCase
         $f = (new UserMethod('f', 'private'))
             ->return('string');
         $expect = 'private function f(): string {}';
-        $actual = $f->__toString();
+        $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }
 
@@ -66,7 +66,7 @@ class UserMethodTest extends \PHPUnit\Framework\TestCase
         $f = (new UserMethod('f', 'private', true))
             ->return('string');
         $expect = 'private static function f(): string {}';
-        $actual = $f->__toString();
+        $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }
 }

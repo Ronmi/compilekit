@@ -10,17 +10,16 @@ class UserMethod extends UserFunction
     public function __construct(
         string $name,
         string $vis = 'public',
-        bool $static = false,
-        bool $pretty = false
+        bool $static = false
     ) {
-        parent::__construct($name, $pretty);
+        parent::__construct($name);
         $this->visibility = $vis;
         $this->static = $static;
     }
 
-    public function __toString(): string
+    public function render(bool $pretty = false): string
     {
-        $ret = parent::__toString();
+        $ret = parent::render($pretty);
         $prefix = $this->visibility . ' ';
         if ($this->static) {
             $prefix .= 'static ';
