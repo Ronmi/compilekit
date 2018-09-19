@@ -17,14 +17,21 @@ class UserMethod extends UserFunction
         $this->static = $static;
     }
 
-    public function render(bool $pretty = false): string
+    public function render(bool $pretty = false, int $indent = 0): string
     {
-        $ret = parent::render($pretty);
+        if ($indent < 0) {
+            $indent = 0;
+        }
+
+        $ret = parent::render($pretty, $indent);
         $prefix = $this->visibility . ' ';
         if ($this->static) {
             $prefix .= 'static ';
         }
 
-        return $prefix . $ret;
+        if ($pretty and $indent > 0) {
+            $ret = substr($ret, $indent * 4);
+        }
+        return str_repeat(' ', $indent * 4) . $prefix . $ret;
     }
 }

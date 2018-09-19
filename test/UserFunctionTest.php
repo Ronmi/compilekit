@@ -38,6 +38,20 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expect, $actual);
     }
 
+    public function testBodyPrettierIdented()
+    {
+        $f = (new Userfunction())
+            ->line('$x = 1;')
+            ->block(['return $x;']);
+        $expect = '    function ()
+    {
+        $x = 1;
+        return $x;
+    }';
+        $actual = $f->render(true, 1);
+        $this->assertEquals($expect, $actual);
+    }
+
     public function testName()
     {
         $f = new Userfunction('f');

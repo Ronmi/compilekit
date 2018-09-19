@@ -30,6 +30,20 @@ class UserMethodTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expect, $actual);
     }
 
+    public function testBodyPrettierIndent()
+    {
+        $f = (new UserMethod('f', 'public', false))
+            ->line('$x = 1;')
+            ->block(['return $x;']);
+        $expect = '    public function f()
+    {
+        $x = 1;
+        return $x;
+    }';
+        $actual = $f->render(true, 1);
+        $this->assertEquals($expect, $actual);
+    }
+
     public function testArgs()
     {
         $f = (new UserMethod('f'))

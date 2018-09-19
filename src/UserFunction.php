@@ -56,31 +56,45 @@ class UserFunction
         return $this;
     }
 
-    public function render(bool $pretty = false): string
+    public function render(bool $pretty = false, int $indent = 0): string
     {
         $ret = $this->returnType;
         if ($this->returnType !== '') {
             $ret = ': ' . $ret;
         }
 
+        if ($indent < 0) {
+            $indent = 0;
+        }
+
         return sprintf(
-            'function %s(%s)%s%s',
+            '%sfunction %s(%s)%s%s',
+            str_repeat(' ', $indent * 4),
             $this->name,
             implode(', ', $this->args),
             $ret,
-            $this->renderBody($pretty)
+            $this->renderBody($pretty, $indent)
         );
     }
 
-    private function renderBody(bool $pretty): string
+    private function renderBody(bool $pretty, int $lv): string
     {
         if (!$pretty) {
             return ' {' . implode('', $this->body) . '}';
         }
 
-        $ret = "\n{\n    ";
-        $ret .= implode("\n    ", $this->body);
-        $ret .= "\n}";
+        $indent = str_repeat(' ', $lv * 4);
+
+        $ret = sprintf(
+            '
+%s{
+%s    %s
+%s}',
+            $indent,
+            $indent,
+            implode("\n" . $indent . '    ', $this->body),
+            $indent
+        );
 
         return $ret;
     }
