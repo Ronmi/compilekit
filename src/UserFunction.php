@@ -96,6 +96,12 @@ class UserFunction
             $indent
         );
 
-        return $ret;
+        $arr = explode("\n", $ret);
+        foreach ($arr as $k => $v) {
+            if (trim($v) === '') {
+                $arr[$k] = '';
+            }
+        }
+        return implode("\n", $arr);
     }
 }
