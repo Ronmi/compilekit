@@ -106,6 +106,16 @@ class Block implements Renderable
     }
 
     /**
+     */
+    public function return(Renderable $value): Block
+    {
+        return $this->append(Value::stmt(
+            Value::as('return'),
+            $value
+        ));
+    }
+
+    /**
      * Helper to add require(__DIR__ . 'file') statement
      *
      *     $b->req('vendor/autoload.php');

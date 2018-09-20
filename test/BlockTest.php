@@ -67,6 +67,15 @@ $b=$a;';
         $this->assertEquals($expect, $actual);
     }
 
+    public function testReturn()
+    {
+        $v = (new Block)->line('1+1');
+        $b = (new Block)->return($v);
+        $expect = 'return 1+1;';
+        $actual = $b->render();
+        $this->assertEquals($expect, $actual);
+    }
+
     public function testReq()
     {
         $f = (new Block)->req('vendor/autoload.php');
