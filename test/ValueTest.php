@@ -57,9 +57,17 @@ class ValueTest extends \PHPUnit\Framework\TestCase
 
     public function testStmt()
     {
-        $f = Value::stmt(new FunctionCall('a'));
-        $expect = 'a();';
-        $actual = $f->render();
+        $f = Value::stmt(Value::as('return'), new FunctionCall('a'));
+        $expect = '    return a();';
+        $actual = $f->render(true, 1);
+        $this->assertEquals($expect, $actual);
+    }
+
+    public function testUgly()
+    {
+        $v = Value::ugly(Value::as('1'));
+        $expect = '1';
+        $actual = $v->render(true, 1);
         $this->assertEquals($expect, $actual);
     }
 }

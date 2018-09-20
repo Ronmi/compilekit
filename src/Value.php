@@ -32,7 +32,43 @@ class Value implements Renderable
     /**
      * Helper to convert an expression to statement by appending a colon.
      */
-    public static function stmt(Renderable $r): Renderable
+    public static function stmt(Renderable ...$r): Renderable
+    {
+        return new class($r) implements Renderable {
+            private $r;
+
+            public function __construct(array $r)
+            {
+                $this->r = $r;
+            }
+
+            public function render(bool $p = false, int $i = 0): string
+            {
+                if ($i < 0) {
+                    $i = 0;
+                }
+                $str = '';
+                if ($p) {
+                    $str = str_repeat(' ', $i * 4);
+                }
+
+                $arr = array_map(function (Renderable $r) use ($p, $i) {
+                    $ret = $r->render($p, $i);
+                    if ($p and $i > 0) {
+                        $ret = substr($ret, $i * 4);
+                    }
+                    return $ret;
+                }, $this->r);
+
+                return $str . implode(' ', $arr) . ';';
+            }
+        };
+    }
+
+    /**
+     * Helper to prevent pretty formater.
+     */
+    public static function ugly(Renderable $r): Renderable
     {
         return new class($r) implements Renderable {
             private $r;
@@ -44,7 +80,7 @@ class Value implements Renderable
 
             public function render(bool $p = false, int $i = 0): string
             {
-                return $this->r->render($p, $i) . ';';
+                return $this->r->render();
             }
         };
     }
