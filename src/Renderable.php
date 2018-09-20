@@ -8,6 +8,7 @@ namespace Fruit\CompileKit;
  * * Generated code MUST obey PSR2 when $pretty is setted to true, prefix with four
  *   space characters per indent level.
  * * Code format when $pretty === false is unspecified.
+ * * User-provided content is not considered as "generated code".
  */
 interface Renderable
 {
