@@ -23,7 +23,7 @@ namespace Fruit\CompileKit;
  *     //     return $ret;
  *     // }
  */
-class UserFunction
+class UserFunction implements Renderable
 {
     private $name;
     private $args = [];

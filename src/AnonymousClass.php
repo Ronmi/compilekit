@@ -2,7 +2,7 @@
 
 namespace Fruit\CompileKit;
 
-class AnonymousClass
+class AnonymousClass implements Renderable
 {
     private $props = [];
     private $methods = [];
