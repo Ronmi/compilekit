@@ -28,7 +28,7 @@ class UserFunction implements Renderable
     private $name;
     private $args = [];
     private $returnType = '';
-    private $body = [];
+    private $body;
 
     /**
      * The constructor.
@@ -41,6 +41,7 @@ class UserFunction implements Renderable
     public function __construct(string $name = '')
     {
         $this->name = $name;
+        $this->body = new Block;
     }
 
     /**
@@ -130,7 +131,7 @@ class UserFunction implements Renderable
      */
     public function line(string $line): UserFunction
     {
-        array_push($this->body, $line);
+        $this->body->line($line);
 
         return $this;
     }
@@ -142,9 +143,7 @@ class UserFunction implements Renderable
      */
     public function block(array $block): UserFunction
     {
-        foreach ($block as $line) {
-            array_push($this->body, $line);
-        }
+        $this->body->line(...$block);
 
         return $this;
     }
@@ -183,31 +182,16 @@ class UserFunction implements Renderable
         );
     }
 
-    private function renderBody(bool $pretty, int $lv): string
+    private function renderBody(bool $pretty, int $indent): string
     {
         if (!$pretty) {
-            return ' {' . implode('', $this->body) . '}';
+            return ' {' . $this->body->render() . '}';
         }
 
-        $indent = str_repeat(' ', $lv * 4);
+        $str = str_repeat(' ', $indent * 4);
 
-        $ret = sprintf(
-            '
-%s{
-%s    %s
-%s}',
-            $indent,
-            $indent,
-            implode("\n" . $indent . '    ', $this->body),
-            $indent
-        );
-
-        $arr = explode("\n", $ret);
-        foreach ($arr as $k => $v) {
-            if (trim($v) === '') {
-                $arr[$k] = '';
-            }
-        }
-        return implode("\n", $arr);
+        return "\n" . $str . "{\n"
+            . $this->body->render($pretty, $indent+1)
+            . "\n" . $str . '}';
     }
 }
