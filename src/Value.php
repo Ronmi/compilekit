@@ -10,6 +10,14 @@ class Value implements Renderable
     private $ret = '';
 
     /**
+     * Helper to create Renderable from raw php code.
+     */
+    public static function as(string $code): Renderable
+    {
+        return (new self)->raw($code);
+    }
+
+    /**
      * Helper to convert some values to Renderable.
      */
     public static function of($value): Renderable
