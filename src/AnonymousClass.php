@@ -83,19 +83,28 @@ class AnonymousClass implements Renderable
         return $this;
     }
 
-    public function args(string ...$args): AnonymousClass
+    public function rawArgs(string ...$args): AnonymousClass
     {
         foreach ($args as $a) {
-            array_push($this->args, $a);
+            array_push($this->args, (new Value)->raw($a));
         }
 
         return $this;
     }
 
-    public function argsve(...$args): AnonymousClass
+    public function bindArgs(...$args): AnonymousClass
     {
         foreach ($args as $a) {
-            array_push($this->args, var_export($a, true));
+            array_push($this->args, (new Value)->bind($a));
+        }
+
+        return $this;
+    }
+
+    public function setArgs(Renderable ...$args): AnonymousClass
+    {
+        foreach ($args as $a) {
+            array_push($this->args, $a);
         }
 
         return $this;
@@ -126,7 +135,11 @@ class AnonymousClass implements Renderable
         if (count($this->args) > 0) {
             $arr[0] = '(';
 
-            array_push($arr, $str . implode(',' . $lf . $str, $this->args));
+            $args = array_map(function ($a) use ($pretty, $indent) {
+                return $a->render($pretty, $indent + 1);
+            }, $this->args);
+
+            array_push($arr, implode(',' . $lf, $args));
         }
         array_push($arr, ')');
 
