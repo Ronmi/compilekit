@@ -29,6 +29,7 @@ class UserFunction implements Renderable
     private $args = [];
     private $returnType = '';
     private $body;
+    private $use = [];
 
     /**
      * The constructor.
@@ -42,6 +43,25 @@ class UserFunction implements Renderable
     {
         $this->name = $name;
         $this->body = new Block;
+    }
+
+    /**
+     * Set inherited parameters.
+     *
+     * Only anonymous function will use this. Named function will ignore it.
+     *
+     * @param $vars string variable names to inherit
+     */
+    public function use(string ...$vars): UserFunction
+    {
+        foreach ($vars as $v) {
+            if ($v[0] !== '$') {
+                $v = '$' . $v;
+            }
+            array_push($this->use, $v);
+        }
+
+        return $this;
     }
 
     /**
@@ -159,6 +179,15 @@ class UserFunction implements Renderable
      */
     public function render(bool $pretty = false, int $indent = 0): string
     {
+        $lf = '';
+        $str = '';
+        if ($pretty) {
+            if ($indent < 0) {
+                $indent = 0;
+            }
+            $lf = "\n";
+            $str = str_repeat(' ', $indent * 4);
+        }
         $ret = $this->returnType;
         if ($this->returnType !== '') {
             $ret = ': ' . $ret;
@@ -168,29 +197,44 @@ class UserFunction implements Renderable
             $indent = 0;
         }
 
-        $args = array_map(function ($a) {
-            return $a->render();
+        $args = array_map(function ($a) use ($pretty, $indent) {
+            return $a->render($pretty, $indent+1);
         }, $this->args);
 
-        return sprintf(
-            '%sfunction %s(%s)%s%s',
-            str_repeat(' ', $indent * 4),
-            $this->name,
-            implode(', ', $args),
-            $ret,
-            $this->renderBody($pretty, $indent)
-        );
+        if ($this->name === '' and count($this->use) > 0) {
+            $str2 = '';
+            if ($pretty) {
+                $str2 = '    ';
+            }
+            $ret = ' use (' . $lf . $str . $str2
+                . implode(',' . $lf . $str . $str2, $this->use) . $lf
+                . $str . ')' . $ret;
+        }
+
+        $lfArg = '';
+        $neck = $lf;
+        if (count($args) > 0) {
+            $lfArg = $lf;
+        }
+        if (!$pretty or count($args) + count($this->use) > 0) {
+            $neck = ' ';
+        }
+
+        return $str . 'function ' . $this->name . '(' . $lfArg
+            . implode(',' . $lfArg, $args) . $lfArg
+            . ')' . $ret . $neck
+            . $this->renderBody($pretty, $indent);
     }
 
     private function renderBody(bool $pretty, int $indent): string
     {
         if (!$pretty) {
-            return ' {' . $this->body->render() . '}';
+            return '{' . $this->body->render() . '}';
         }
 
         $str = str_repeat(' ', $indent * 4);
 
-        return "\n" . $str . "{\n"
+        return $str . "{\n"
             . $this->body->render($pretty, $indent+1)
             . "\n" . $str . '}';
     }
