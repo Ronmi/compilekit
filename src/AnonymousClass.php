@@ -46,6 +46,16 @@ class AnonymousClass
         return $this;
     }
 
+    public function can(
+        string $name,
+        string $visibility = 'public',
+        bool $static = false
+    ): UserMethod {
+        $ret = new UserMethod($name, $visibility, $static);
+        array_push($this->methods, $ret);
+        return $ret;
+    }
+
     public function const(string $name, string $val): AnonymousClass
     {
         array_push($this->consts, $name . ' = ' . $val);
