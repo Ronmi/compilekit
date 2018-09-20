@@ -25,7 +25,7 @@ class FunctionCallTest extends \PHPUnit\Framework\TestCase
 
     public function testRender1Arg()
     {
-        $f = (new FunctionCall('a'))->arg('1');
+        $f = (new FunctionCall('a'))->arg(1);
         $expect = 'a(1)';
         $actual = $f->render();
         $this->assertEquals($expect, $actual, 'no format');
@@ -45,7 +45,7 @@ class FunctionCallTest extends \PHPUnit\Framework\TestCase
 
     public function testRender2Arg()
     {
-        $f = (new FunctionCall('a'))->arg('1')->arg('"asd"');
+        $f = (new FunctionCall('a'))->arg(1)->rawArg('"asd"');
         $expect = 'a(1,"asd")';
         $actual = $f->render();
         $this->assertEquals($expect, $actual, 'no format');
@@ -67,7 +67,7 @@ class FunctionCallTest extends \PHPUnit\Framework\TestCase
 
     public function testBind()
     {
-        $f = (new FunctionCall('a'))->bindArg(1)->bindArg('asd');
+        $f = (new FunctionCall('a'))->arg(1)->arg('asd');
         $expect = "a(1,'asd')";
         $actual = $f->render();
         $this->assertEquals($expect, $actual, 'no format');
@@ -90,10 +90,10 @@ class FunctionCallTest extends \PHPUnit\Framework\TestCase
     public function testRenderable()
     {
         $ve = (new FunctionCall('var_export'))
-               ->arg('$a')
-               ->arg('true');
+               ->rawArg('$a')
+               ->rawArg('true');
         $f = (new FunctionCall('a'))
-               ->renderArg($ve);
+               ->arg($ve);
         $expect = 'a(var_export($a,true))';
         $actual = $f->render();
         $this->assertEquals($expect, $actual, 'no format');

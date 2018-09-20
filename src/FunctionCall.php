@@ -22,15 +22,15 @@ class FunctionCall implements Renderable
     /**
      * Set the arguments to pass.
      *
-     *     (new FunctionCall('a')->arg('1', '"asd"'); // a(1, "asd")
+     *     (new FunctionCall('a')->rawArg('1', '"asd"'); // a(1, "asd")
      *
-     * @see FunctionCall::bindArg
+     * @see FunctionCall::arg
      * @param $vals string[] php codes to pass.
      */
-    public function arg(string ...$vals): FunctionCall
+    public function rawArg(string ...$vals): FunctionCall
     {
         foreach ($vals as $v) {
-            array_push($this->args, $v);
+            array_push($this->args, Value::as($v));
         }
 
         return $this;
@@ -39,26 +39,17 @@ class FunctionCall implements Renderable
     /**
      * Set the arguments to pass.
      *
-     * Arguments passed here will be converted to string using var_export().
+     * Arguments passed here will be converted to string using Value::of().
      *
-     *     (new FunctionCall('a')->bindArg(1, 'asd'); // a(1, 'asd');
+     *     (new FunctionCall('a')->arg(1, 'asd'); // a(1, 'asd');
      *
-     * @see FunctionCall::arg
+     * @see FunctionCall::rawArg
      * @param $vals string[] php codes to pass.
      */
-    public function bindArg(...$vals): FunctionCall
+    public function arg(...$vals): FunctionCall
     {
         foreach ($vals as $v) {
-            array_push($this->args, var_export($v, true));
-        }
-
-        return $this;
-    }
-
-    public function renderArg(Renderable ...$vals): FunctionCall
-    {
-        foreach ($vals as $v) {
-            array_push($this->args, $v);
+            array_push($this->args, Value::of($v));
         }
 
         return $this;
