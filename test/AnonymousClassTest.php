@@ -20,7 +20,7 @@ class AnonymousClassTest extends \PHPUnit\Framework\TestCase
             ->method(new UserMethod('m1'))
             ->method((new UserMethod('m1', 'private', true)));
 
-        $expect = 'new class(1) extends A implements B,C{use D;use E;const C1 = 2;public $p1;private $p2 = 3;public function m1() {}private static function m1() {}}';
+        $expect = 'new class(1) extends A implements B,C{use D;use E;const C1 = 2;public $p1;private static $p2 = 3;public function m1() {}private static function m1() {}}';
         $actual = $c->render();
 
         $this->assertEquals($expect, $actual);
@@ -51,7 +51,7 @@ class AnonymousClassTest extends \PHPUnit\Framework\TestCase
     const C1 = 2;
 
     public $p1;
-    private $p2 = 3;
+    private static $p2 = 3;
 
     public function m1()
     {

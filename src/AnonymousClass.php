@@ -12,28 +12,24 @@ class AnonymousClass implements Renderable
     private $traits = [];
     private $args = [];
 
+    public function has(
+        string $name,
+        string $visibility = 'public',
+        bool $static = false
+    ): Argument {
+        $ret = new Argument($name);
+        array_push($this->props, [$ret, $visibility, $static]);
+
+        return $ret;
+    }
+
     public function prop(
         string $name,
         string $visibility = 'public',
         bool $static = false,
         string $default = ''
     ): AnonymousClass {
-        if ($name[0] !== '$') {
-            $name = '$' . $name;
-        }
-
-        $p = $name;
-        if ($static) {
-            $p = 'static ' . $name;
-        }
-        $p = $visibility . ' ' . $name;
-
-        if ($default !== '') {
-            $p .= ' = ' . $default;
-        }
-
-        array_push($this->props, $p);
-
+        $this->has($name, $visibility, $static)->rawDefault($default);
         return $this;
     }
 
@@ -184,7 +180,13 @@ class AnonymousClass implements Renderable
         // render properties
         if (count($this->props) > 0) {
             foreach ($this->props as $p) {
-                array_push($arr, $next . $p . ';');
+                $prop = $p[1] . ' ';
+                if ($p[2]) {
+                    $prop .= 'static ';
+                }
+                $prop .= $p[0]->type('')->render();
+
+                array_push($arr, $next . $prop . ';');
             }
             if ($pretty) {
                 // add empty line
