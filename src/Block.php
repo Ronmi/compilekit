@@ -93,7 +93,7 @@ class Block implements Renderable
     {
         $str = 'use ' . $cls;
         if ($as !== '') {
-            $str .= ' AS ' . $as;
+            $str .= ' as ' . $as;
         }
 
         return $this->line($str . ';');

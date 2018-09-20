@@ -50,4 +50,20 @@ $b=$a;';
         $actual = $f->render(true, 1);
         $this->assertEquals($expect, $actual);
     }
+
+    public function testNS()
+    {
+        $f = (new Block)->ns('A\B\C');
+        $expect = 'namespace A\B\C;';
+        $actual = $f->render();
+        $this->assertEquals($expect, $actual);
+    }
+
+    public function testUse()
+    {
+        $f = (new Block)->use('A\B\C')->use('D\E\F', 'X');
+        $expect = 'use A\B\C;use D\E\F as X;';
+        $actual = $f->render();
+        $this->assertEquals($expect, $actual);
+    }
 }
