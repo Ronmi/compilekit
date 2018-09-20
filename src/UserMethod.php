@@ -2,11 +2,26 @@
 
 namespace Fruit\CompileKit;
 
+/**
+ * UserMethod is a helper to define your own method.
+ *
+ * @see UserFunction
+ */
 class UserMethod extends UserFunction
 {
     private $visibility;
     private $static;
 
+    /**
+     * The constructor.
+     *
+     * Pass the name of the method here. Method name and visibility is NOT
+     * validated, might be supported in later version.
+     *
+     * @param $name string method name.
+     * @param $vis string visibility, default to public.
+     * @param $static bool true if it is a static method, default to false.
+     */
     public function __construct(
         string $name,
         string $vis = 'public',
@@ -17,6 +32,9 @@ class UserMethod extends UserFunction
         $this->static = $static;
     }
 
+    /**
+     * @see UserFunction::render
+     */
     public function render(bool $pretty = false, int $indent = 0): string
     {
         if ($indent < 0) {
