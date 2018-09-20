@@ -72,4 +72,30 @@ class Block implements Renderable
 
         return substr($ret, 1);
     }
+
+    /**
+     * Helper to add namespace statement.
+     *
+     * @param $namespace string namespace.
+     */
+    public function ns(string $namespace): Block
+    {
+        return $this->line('namespace ' . $namespace . ';');
+    }
+
+    /**
+     * Helper to add use statement.
+     *
+     * @param $cls string full class name to use.
+     * @param $as string use it as. (optional)
+     */
+    public function use(string $cls, string $as = ''): Block
+    {
+        $str = 'use ' . $cls;
+        if ($as !== '') {
+            $str .= ' AS ' . $as;
+        }
+
+        return $this->line($str . ';');
+    }
 }
