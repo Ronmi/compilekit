@@ -79,7 +79,7 @@ $b=$a;';
     public function testReq()
     {
         $f = (new Block)->req('vendor/autoload.php');
-        $expect = "require(__DIR__ . 'vendor/autoload.php');";
+        $expect = "require(__DIR__ . '/vendor/autoload.php');";
         $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }
@@ -87,7 +87,7 @@ $b=$a;';
     public function testReqOnce()
     {
         $f = (new Block)->reqOnce('vendor/autoload.php');
-        $expect = "require_once(__DIR__ . 'vendor/autoload.php');";
+        $expect = "require_once(__DIR__ . '/vendor/autoload.php');";
         $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }

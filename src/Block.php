@@ -125,6 +125,9 @@ class Block implements Renderable
      */
     public function req(string $file): Block
     {
+        if ($file[0] !== '/') {
+            $file = '/' . $file;
+        }
         return $this->line(
             (new FunctionCall('require'))
             ->rawArg('__DIR__ . ' . Value::of($file)->render())
@@ -142,6 +145,9 @@ class Block implements Renderable
      */
     public function reqOnce(string $file): Block
     {
+        if ($file[0] !== '/') {
+            $file = '/' . $file;
+        }
         return $this->line(
             (new FunctionCall('require_once'))
             ->rawArg('__DIR__ . ' . Value::of($file)->render())
