@@ -66,4 +66,36 @@ $b=$a;';
         $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }
+
+    public function testReq()
+    {
+        $f = (new Block)->req('vendor/autoload.php');
+        $expect = "require(__DIR__ . 'vendor/autoload.php');";
+        $actual = $f->render();
+        $this->assertEquals($expect, $actual);
+    }
+
+    public function testReqOnce()
+    {
+        $f = (new Block)->reqOnce('vendor/autoload.php');
+        $expect = "require_once(__DIR__ . 'vendor/autoload.php');";
+        $actual = $f->render();
+        $this->assertEquals($expect, $actual);
+    }
+
+    public function testReqAbs()
+    {
+        $f = (new Block)->reqAbs('vendor/autoload.php');
+        $expect = "require('vendor/autoload.php');";
+        $actual = $f->render();
+        $this->assertEquals($expect, $actual);
+    }
+
+    public function testReqOnceAbs()
+    {
+        $f = (new Block)->reqOnceAbs('vendor/autoload.php');
+        $expect = "require_once('vendor/autoload.php');";
+        $actual = $f->render();
+        $this->assertEquals($expect, $actual);
+    }
 }

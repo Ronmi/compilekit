@@ -98,4 +98,72 @@ class Block implements Renderable
 
         return $this->line($str . ';');
     }
+
+    /**
+     * Helper to add require(__DIR__ . 'file') statement
+     *
+     *     $b->req('vendor/autoload.php');
+     *     // require(__DIR__ . 'vendor/autoload.php');
+     *
+     * @param $file string file path.
+     */
+    public function req(string $file): Block
+    {
+        return $this->line(
+            (new FunctionCall('require'))
+            ->rawArg('__DIR__ . ' . Value::of($file)->render())
+            ->render() . ';'
+        );
+    }
+
+    /**
+     * Helper to add require_once(__DIR__ . 'file') statement
+     *
+     *     $b->reqOnce('vendor/autoload.php');
+     *     // require_once(__DIR__ . 'vendor/autoload.php');
+     *
+     * @param $file string file path.
+     */
+    public function reqOnce(string $file): Block
+    {
+        return $this->line(
+            (new FunctionCall('require_once'))
+            ->rawArg('__DIR__ . ' . Value::of($file)->render())
+            ->render() . ';'
+        );
+    }
+
+    /**
+     * Helper to add require('file') statement
+     *
+     *     $b->reqAbs('vendor/autoload.php');
+     *     // require('vendor/autoload.php');
+     *
+     * @param $file string file path.
+     */
+    public function reqAbs(string $file): Block
+    {
+        return $this->line(
+            (new FunctionCall('require'))
+            ->arg($file)
+            ->render() . ';'
+        );
+    }
+
+    /**
+     * Helper to add require('file') statement
+     *
+     *     $b->reqOnceAbs('vendor/autoload.php');
+     *     // require_once('vendor/autoload.php');
+     *
+     * @param $file string file path.
+     */
+    public function reqOnceAbs(string $file): Block
+    {
+        return $this->line(
+            (new FunctionCall('require_once'))
+            ->arg($file)
+            ->render() . ';'
+        );
+    }
 }
