@@ -10,6 +10,18 @@ class Value implements Renderable
     private $ret = '';
 
     /**
+     * Helper to convert some values to Renderable.
+     */
+    public static function of($value): Renderable
+    {
+        if ($value instanceof Renderable) {
+            return $value;
+        }
+
+        return (new self)->bind($value);
+    }
+
+    /**
      * Set raw php code.
      *
      * @param $code string raw PHP code.
