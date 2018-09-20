@@ -2,6 +2,9 @@
 
 namespace Fruit\CompileKit;
 
+/**
+ * AnonymousClass represents PHP 7.0+ anonymous class syntax.
+ */
 class AnonymousClass implements Renderable
 {
     private $props = [];
@@ -12,6 +15,19 @@ class AnonymousClass implements Renderable
     private $traits = [];
     private $args = [];
 
+    /**
+     * Create a new property.
+     *
+     * The type hint of returned Argument is ignored.
+     *
+     *     $c->has('prop1')->bindDefault(1); // public $prop1 = 1;
+     *     // following code generates private static $prop1 = 1;
+     *     $c->has('prop1', 'private', true)->bindDefault(1);
+     *
+     * @param $name string property name.
+     * @param $visibility string property visibility, default to public.
+     * @param $static bool true if this is a static property, default to false.
+     */
     public function has(
         string $name,
         string $visibility = 'public',
@@ -23,6 +39,17 @@ class AnonymousClass implements Renderable
         return $ret;
     }
 
+    /**
+     * This is helper for AnonymousClass::has.
+     *
+     * It accepts raw PHP code for property default value, as you cannot use complex
+     * value at property definition.
+     *
+     * @param $name string property name.
+     * @param $visibility string property visibility, default to public.
+     * @param $static bool true if this is a static property, default to false.
+     * @param $default string php code to initialize property at difinition. (optional)
+     */
     public function prop(
         string $name,
         string $visibility = 'public',
@@ -33,6 +60,9 @@ class AnonymousClass implements Renderable
         return $this;
     }
 
+    /**
+     * Add methods to this class.
+     */
     public function method(UserMethod ...$methods): AnonymousClass
     {
         foreach ($methods as $m) {
@@ -42,6 +72,9 @@ class AnonymousClass implements Renderable
         return $this;
     }
 
+    /**
+     * Add a method to this class.
+     */
     public function can(
         string $name,
         string $visibility = 'public',
@@ -52,6 +85,12 @@ class AnonymousClass implements Renderable
         return $ret;
     }
 
+    /**
+     * Add a class constant to this class.
+     *
+     * Since you cannot use complex value as constants, it supports only raw php
+     * code to initialize constant.
+     */
     public function const(string $name, string $val): AnonymousClass
     {
         array_push($this->consts, $name . ' = ' . $val);
@@ -59,12 +98,22 @@ class AnonymousClass implements Renderable
         return $this;
     }
 
+    /**
+     * Set the parent class of this class.
+     *
+     * You MUST take care of namespace.
+     */
     public function extends(string $cls): AnonymousClass
     {
         $this->parent = $cls;
         return $this;
     }
 
+    /**
+     * Declares the class to implement specified interface.
+     *
+     * You MUST take care of namespace.
+     */
     public function implements(string ...$faces): AnonymousClass
     {
         foreach ($faces as $f) {
@@ -74,6 +123,11 @@ class AnonymousClass implements Renderable
         return $this;
     }
 
+    /**
+     * Using traits in this class.
+     *
+     * You MUST take care of namespace.
+     */
     public function use(string ...$traits): AnonymousClass
     {
         foreach ($traits as $t) {
@@ -83,6 +137,11 @@ class AnonymousClass implements Renderable
         return $this;
     }
 
+    /**
+     * Passing some values to constructor.
+     *
+     * @param $args string[] raw php codes.
+     */
     public function rawArgs(string ...$args): AnonymousClass
     {
         foreach ($args as $a) {
@@ -92,6 +151,11 @@ class AnonymousClass implements Renderable
         return $this;
     }
 
+    /**
+     * Passing some values to constructor.
+     *
+     * @param $args mixed[] arguments to pass, will be var_export'ed when rendering.
+     */
     public function bindArgs(...$args): AnonymousClass
     {
         foreach ($args as $a) {
@@ -101,6 +165,9 @@ class AnonymousClass implements Renderable
         return $this;
     }
 
+    /**
+     * Passing some Renderable to constructor.
+     */
     public function setArgs(Renderable ...$args): AnonymousClass
     {
         foreach ($args as $a) {
@@ -110,6 +177,9 @@ class AnonymousClass implements Renderable
         return $this;
     }
 
+    /**
+     * @see Renderable
+     */
     public function render(bool $pretty = false, int $indent = 0): string
     {
         if ($indent < 0) {
