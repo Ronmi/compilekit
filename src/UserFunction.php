@@ -33,6 +33,11 @@ class UserFunction
         return $this;
     }
 
+    public function argve(string $name, $default, string $type = ''): UserFunction
+    {
+        return $this->arg($name, $type, var_export($default, true));
+    }
+
     public function return(string $type): UserFunction
     {
         $this->returnType = $type;
