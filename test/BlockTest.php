@@ -39,4 +39,15 @@ $b=$a;';
         $actual = $f->render(true, 1);
         $this->assertEquals($expect, $actual);
     }
+
+    public function testAppend()
+    {
+        $f = (new Block)
+            ->line('$a=1;')
+            ->append((new Block)->line('$b=$a;'));
+        $expect = '    $a=1;
+    $b=$a;';
+        $actual = $f->render(true, 1);
+        $this->assertEquals($expect, $actual);
+    }
 }

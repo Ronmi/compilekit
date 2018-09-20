@@ -2,6 +2,9 @@
 
 namespace Fruit\CompileKit;
 
+/**
+ * Block denotes multiple lines of php code.
+ */
 class Block implements Renderable
 {
     private $body = [];
@@ -15,6 +18,20 @@ class Block implements Renderable
     {
         foreach ($lines as $line) {
             array_push($this->body, $line);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Append another block of code to this block.
+     *
+     * @param $blocks Renderable[] php codes
+     */
+    public function append(Renderable ...$blocks): Block
+    {
+        foreach ($blocks as $block) {
+            array_push($this->body, $block);
         }
 
         return $this;
@@ -37,7 +54,9 @@ class Block implements Renderable
         $ret = '';
         foreach ($this->body as $line) {
             $buf = "\n";
-            if (trim($line) !== '') {
+            if ($line instanceof Renderable) {
+                $buf .= $line->render(true, $lv);
+            } elseif (trim($line) !== '') {
                 $buf .= $indent . $line;
             }
             $ret .= $buf;
