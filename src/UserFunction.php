@@ -75,7 +75,7 @@ class UserFunction implements Renderable
      *     $userFunc->arg('a', 'int', var_export(1, true));
      *
      * @see UserFunction::accept
-     * @see UserFunction::argve
+     * @see UserFunction::bindArg
      * @param $name string name of the argument.
      * @param $type string type hint of the argument. (optional)
      * @param $default string PHP SOURCE CODE of default value of the argument. (optional)
@@ -103,7 +103,7 @@ class UserFunction implements Renderable
      * @param $default string default value of the argument. MUST COMPITABLE WITH var_export().
      * @param $type string type hint of the argument. (optional)
      */
-    public function argve(string $name, $default, string $type = ''): UserFunction
+    public function bindArg(string $name, $default, string $type = ''): UserFunction
     {
         $this->accept($name)
             ->type($type)
