@@ -186,8 +186,7 @@ class AnonymousClass implements Renderable
             $indent = 0;
         }
 
-        return 'new class'
-            . $this->renderTyping($pretty, $indent)
+        return $this->renderTyping($pretty, $indent)
             . $this->renderBody($pretty, $indent);
     }
 
@@ -195,8 +194,10 @@ class AnonymousClass implements Renderable
     {
         $str = '';
         $lf = '';
+        $heading = '';
         if ($pretty) {
             $str = str_repeat(' ', ($indent+1) * 4);
+            $heading = str_repeat(' ', $indent * 4);
             $lf = "\n";
         }
 
@@ -211,7 +212,7 @@ class AnonymousClass implements Renderable
 
             array_push($arr, implode(',' . $lf, $args));
         }
-        array_push($arr, ')');
+        array_push($arr, $heading . ')');
 
         // extends
         if ($this->parent !== '') {
@@ -223,7 +224,7 @@ class AnonymousClass implements Renderable
             array_push($arr, $str . implode(',' . $lf . $str, $this->faces));
         }
 
-        return implode($lf, $arr) . $lf;
+        return $heading . 'new class' . implode($lf, $arr) . $lf;
     }
 
     private function renderBody(bool $pretty, int $indent): string
