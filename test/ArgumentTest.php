@@ -22,19 +22,19 @@ class ArguemntTest extends \PHPUnit\Framework\TestCase
                 'type hinted but no default value'
             ],
             [
-                (new A('a'))->val('1'),
+                (new A('a'))->rawDefault('1'),
                 '$a = 1',
                 '    $a = 1',
                 'default value without type'
             ],
             [
-                (new A('a'))->var(1),
+                (new A('a'))->bindDefault(1),
                 '$a = 1',
                 '    $a = 1',
                 'default value without type (var_exported)'
             ],
             [
-                (new A('a'))->type('int')->val('1'),
+                (new A('a'))->type('int')->rawDefault('1'),
                 'int $a = 1',
                 '    int $a = 1',
                 'all-in-one'

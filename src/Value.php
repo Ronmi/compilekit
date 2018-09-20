@@ -7,7 +7,7 @@ namespace Fruit\CompileKit;
  */
 class Value implements Renderable
 {
-    private $ret = 'null';
+    private $ret = '';
 
     /**
      * Set raw php code.

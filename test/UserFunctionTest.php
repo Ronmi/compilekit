@@ -63,11 +63,11 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
     public function testArgs()
     {
         $f = (new Userfunction())
-            ->arg('arg1')
-            ->arg('$arg2')
-            ->arg('$arg3', 'string')
-            ->arg('$arg4', '', 'null')
-            ->arg('arg5', 'string', '"test"');
+            ->rawArg('arg1')
+            ->rawArg('$arg2')
+            ->rawArg('$arg3', 'string')
+            ->rawArg('$arg4', '', 'null')
+            ->rawArg('arg5', 'string', '"test"');
         $expect = 'function ($arg1,$arg2,string $arg3,$arg4 = null,string $arg5 = "test") {}';
         $actual = $f->render();
         $this->assertEquals($expect, $actual);
@@ -85,7 +85,7 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
     public function testUseWithAnonymous()
     {
         $f = (new Userfunction())
-            ->arg('a')
+            ->rawArg('a')
             ->use('b');
         $expect = 'function ($a) use ($b) {}';
         $actual = $f->render();
@@ -105,7 +105,7 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
     public function testUseWithNamed()
     {
         $f = (new Userfunction('a'))
-            ->arg('a')
+            ->rawArg('a')
             ->use('b');
         $expect = 'function a($a) {}';
         $actual = $f->render();

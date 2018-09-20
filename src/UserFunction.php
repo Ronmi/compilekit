@@ -84,15 +84,15 @@ class UserFunction implements Renderable
     /**
      * Setting function arguments.
      *
-     * You can call this several times to accept multiple arguments:
+     * This is helper method for UserFunction::accept.
      *
      *     // generates function (string $a, int $b = 0)
-     *     $userFunc->arg('$a', 'string')->arg('b', 'int', '0');
+     *     $userFunc->rawArg('$a', 'string')->rawArg('b', 'int', '0');
      *
      * You have to pass PHP SOURCE CODE to the $default. You can do it easily with
      * `var_export()` for primitive values.
      *
-     *     $userFunc->arg('a', 'int', var_export(1, true));
+     *     $userFunc->rawArg('a', 'int', var_export(1, true));
      *
      * @see UserFunction::accept
      * @see UserFunction::bindArg
@@ -100,11 +100,11 @@ class UserFunction implements Renderable
      * @param $type string type hint of the argument. (optional)
      * @param $default string PHP SOURCE CODE of default value of the argument. (optional)
      */
-    public function arg(string $name, string $type = '', string $default = ''): UserFunction
+    public function rawArg(string $name, string $type = '', string $default = ''): UserFunction
     {
         $this->accept($name)
             ->type($type)
-            ->val($default);
+            ->rawDefault($default);
 
         return $this;
     }
@@ -112,12 +112,12 @@ class UserFunction implements Renderable
     /**
      * Setting function arguments.
      *
-     * This is helper method for UserFunction::arg.
+     * This is helper method for UserFunction::accept.
      *
      *     // generates function (int $a = 1)
-     *     $userFunc->argve('a', 1, 'int');
+     *     $userFunc->bindArg('a', 1, 'int')->bindArg('b', true);
      *
-     * WARNING: Order of arguments between arg and argve is different.
+     * WARNING: Order of arguments between rawArg and bindArg is different.
      *
      * @param $name string name of the argument.
      * @param $default string default value of the argument. MUST COMPITABLE WITH var_export().
@@ -127,7 +127,7 @@ class UserFunction implements Renderable
     {
         $this->accept($name)
             ->type($type)
-            ->var($default);
+            ->bindDefault($default);
 
         return $this;
     }

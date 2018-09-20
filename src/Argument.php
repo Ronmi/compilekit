@@ -6,7 +6,7 @@ class Argument
 {
     private $name;
     private $typeHint = '';
-    private $defaultValue = '';
+    private $defaultValue;
 
     public function __construct(string $name)
     {
@@ -15,6 +15,7 @@ class Argument
         }
 
         $this->name = $name;
+        $this->defaultValue = new Value;
     }
 
     public function type(string $type): Argument
@@ -23,15 +24,27 @@ class Argument
         return $this;
     }
 
-    public function val(string $val): Argument
+    public function defaults(): Value
     {
-        $this->defaultValue = $val;
+        return $this->defaultValue;
+    }
+
+    public function rawDefault(string $val): Argument
+    {
+        $this->defaults()->raw($val);
         return $this;
     }
 
-    public function var($val): Argument
+    public function bindDefault($val): Argument
     {
-        return $this->val(var_export($val, true));
+        $this->defaults()->bind($val);
+        return $this;
+    }
+
+    public function setDefault($val): Argument
+    {
+        $this->defaults()->set($val);
+        return $this;
     }
 
     public function render(bool $pretty = false, int $indent = 0): string
@@ -46,7 +59,7 @@ class Argument
             $t .= ' ';
         }
 
-        $d = $this->defaultValue;
+        $d = $this->defaultValue->render();
         if ($d !== '') {
             $d = ' = ' . $d;
         }
