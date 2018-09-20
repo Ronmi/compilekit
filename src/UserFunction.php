@@ -14,28 +14,30 @@ class UserFunction
         $this->name = $name;
     }
 
+    public function accept(string $name): Argument
+    {
+        $ret = new Argument($name);
+        array_push($this->args, $ret);
+
+        return $ret;
+    }
+
     public function arg(string $name, string $type = '', string $default = ''): UserFunction
     {
-        if ($name[0] !== '$') {
-            $name = '$' . $name;
-        }
-
-        if ($type !== '') {
-            $type .= ' ';
-        }
-
-        if ($default !== '') {
-            $default = ' = ' . $default;
-        }
-
-        array_push($this->args, $type . $name . $default);
+        $this->accept($name)
+            ->type($type)
+            ->val($default);
 
         return $this;
     }
 
     public function argve(string $name, $default, string $type = ''): UserFunction
     {
-        return $this->arg($name, $type, var_export($default, true));
+        $this->accept($name)
+            ->type($type)
+            ->var($default);
+
+        return $this;
     }
 
     public function return(string $type): UserFunction
@@ -72,11 +74,15 @@ class UserFunction
             $indent = 0;
         }
 
+        $args = array_map(function ($a) {
+            return $a->render();
+        }, $this->args);
+
         return sprintf(
             '%sfunction %s(%s)%s%s',
             str_repeat(' ', $indent * 4),
             $this->name,
-            implode(', ', $this->args),
+            implode(', ', $args),
             $ret,
             $this->renderBody($pretty, $indent)
         );
