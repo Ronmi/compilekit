@@ -24,6 +24,14 @@ class Block implements Renderable
     }
 
     /**
+     * A helper to add empty line.
+     */
+    public function space(): Block
+    {
+        return $this->line('');
+    }
+
+    /**
      * Append another block of code to this block.
      *
      * @param $blocks Renderable[] php codes
