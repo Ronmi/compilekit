@@ -30,6 +30,26 @@ class Value implements Renderable
     }
 
     /**
+     * Helper to convert an expression to statement by appending a colon.
+     */
+    public static function stmt(Renderable $r): Renderable
+    {
+        return new class($r) implements Renderable {
+            private $r;
+
+            public function __construct(Renderable $r)
+            {
+                $this->r = $r;
+            }
+
+            public function render(bool $p = false, int $i = 0): string
+            {
+                return $this->r->render($p, $i) . ';';
+            }
+        };
+    }
+
+    /**
      * Set raw php code.
      *
      * @param $code string raw PHP code.

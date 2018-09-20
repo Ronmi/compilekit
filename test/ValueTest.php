@@ -3,6 +3,7 @@
 namespace FruitTest\CompileKit;
 
 use Fruit\CompileKit\Value;
+use Fruit\CompileKit\FunctionCall;
 
 class ValueTest extends \PHPUnit\Framework\TestCase
 {
@@ -52,5 +53,13 @@ class ValueTest extends \PHPUnit\Framework\TestCase
         $expect = '    1';
         $actual = $v->render(true, 1);
         $this->assertEquals($expect, $actual, 'indented');
+    }
+
+    public function testStmt()
+    {
+        $f = Value::stmt(new FunctionCall('a'));
+        $expect = 'a();';
+        $actual = $f->render();
+        $this->assertEquals($expect, $actual);
     }
 }
