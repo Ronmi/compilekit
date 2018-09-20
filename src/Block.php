@@ -51,7 +51,13 @@ class Block implements Renderable
     public function render(bool $pretty = false, int $lv = 0): string
     {
         if (!$pretty) {
-            return implode('', $this->body);
+            return implode('', array_map(function ($b) {
+                if ($b instanceof Renderable) {
+                    return $b->render(false);
+                }
+
+                return $b;
+            }, $this->body));
         }
 
         if ($lv < 0) {
