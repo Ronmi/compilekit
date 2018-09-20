@@ -6,7 +6,7 @@ namespace Fruit\CompileKit;
  * Argument represents the definition of a PHP variable, especially for function
  * arguments.
  */
-class Argument
+class Argument implements Renderable
 {
     private $name;
     private $typeHint = '';
