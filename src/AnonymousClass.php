@@ -86,6 +86,15 @@ class AnonymousClass
         return $this;
     }
 
+    public function argsve(...$args): AnonymousClass
+    {
+        foreach ($args as $a) {
+            array_push($this->args, var_export($a, true));
+        }
+
+        return $this;
+    }
+
     public function render(bool $pretty = false, int $indent = 0): string
     {
         if ($indent < 0) {
