@@ -106,6 +106,7 @@ class Block implements Renderable
     }
 
     /**
+     * Helper to add return statement.
      */
     public function return(Renderable $value): Block
     {
