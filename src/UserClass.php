@@ -26,17 +26,38 @@ class UserClass implements Renderable
      * The type hint of returned Argument is ignored.
      *
      *     $c->has('prop1')->bindDefault(1); // public $prop1 = 1;
-     *     // following code generates private static $prop1 = 1;
-     *     $c->has('prop1', 'private', true)->bindDefault(1);
      *
      * @param $name string property name.
      * @param $visibility string property visibility, default to public.
-     * @param $static bool true if this is a static property, default to false.
      */
-    public function has(
+    public function has(string $name, string $visibility = 'public'): Argument
+    {
+        return $this->addProp($name, $visibility, false);
+    }
+
+    /**
+     * Create a new static property.
+     *
+     * The type hint of returned Argument is ignored.
+     *
+     *     $c->has('prop1')->bindDefault(1); // public $prop1 = 1;
+     *     // following code generates private static $prop1 = 1;
+     *     $c->hasStatic('prop1', 'private')->bindDefault(1);
+     *
+     * @param $name string property name.
+     * @param $visibility string property visibility, default to public.
+     */
+    public function hasStatic(
         string $name,
-        string $visibility = 'public',
-        bool $static = false
+        string $visibility = 'public'
+    ): Argument {
+        return $this->addProp($name, $visibility, true);
+    }
+
+    private function addProp(
+        string $name,
+        string $visibility,
+        bool $static
     ): Argument {
         $ret = new Argument($name);
         array_push($this->props, [$ret, $visibility, $static]);
@@ -45,7 +66,7 @@ class UserClass implements Renderable
     }
 
     /**
-     * This is helper for UserClass::has.
+     * This is helper for UserClass::has and UserClass::hasStatic.
      *
      * It accepts raw PHP code for property default value, as you cannot use complex
      * value at property definition.
@@ -61,7 +82,7 @@ class UserClass implements Renderable
         bool $static = false,
         string $default = ''
     ): UserClass {
-        $this->has($name, $visibility, $static)->rawDefault($default);
+        $this->addProp($name, $visibility, $static)->rawDefault($default);
         return $this;
     }
 
@@ -80,7 +101,20 @@ class UserClass implements Renderable
     /**
      * Add a method to this class.
      */
-    public function can(
+    public function can(string $name, string $visibility): UserMethod
+    {
+        return $this->addMethod($name, $visibility, false);
+    }
+
+    /**
+     * Add a static method to this class.
+     */
+    public function canStatic(string $name, string $visibility): UserMethod
+    {
+        return $this->addMethod($name, $visibility, true);
+    }
+
+    private function addMethod(
         string $name,
         string $visibility = 'public',
         bool $static = false
