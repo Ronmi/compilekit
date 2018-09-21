@@ -169,6 +169,18 @@ class UserFunction implements Renderable
     }
 
     /**
+     * Append a block of php code to function body.
+     *
+     * @param $block string array of php codes
+     */
+    public function append(Block $block): UserFunction
+    {
+        $this->body->append($block);
+
+        return $this;
+    }
+
+    /**
      * Generate PHP code.
      *
      * By default, it generates minimal codes. You can set $pretty to true to

@@ -3,6 +3,8 @@
 namespace FruitTest\CompileKit;
 
 use Fruit\CompileKit\UserFunction;
+use Fruit\CompileKit\Block;
+use Fruit\CompileKit\Value;
 
 class UserFunctionTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,7 +30,7 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
     {
         $f = (new Userfunction())
             ->line('$x = 1;')
-            ->block(['return $x;']);
+            ->append((new Block)->return(Value::as('$x')));
         $expect = 'function ()
 {
     $x = 1;
