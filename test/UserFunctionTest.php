@@ -75,6 +75,27 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expect, $actual);
     }
 
+    public function testArgsPrettyIndent()
+    {
+        $f = (new UserFunction('f'))
+            ->rawArg('arg1')
+            ->rawArg('$arg2')
+            ->rawArg('$arg3', 'string')
+            ->rawArg('$arg4', '', 'null')
+            ->rawArg('arg5', 'string', '"test"');
+        $expect = '    function f(
+        $arg1,
+        $arg2,
+        string $arg3,
+        $arg4 = null,
+        string $arg5 = "test"
+    ) {
+
+    }';
+        $actual = $f->render(true, 1);
+        $this->assertEquals($expect, $actual);
+    }
+
     public function testReturnType()
     {
         $f = (new Userfunction())

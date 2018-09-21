@@ -241,9 +241,11 @@ class UserFunction implements Renderable
         }
 
         $lfArg = '';
+        $strArg = '';
         $neck = $lf;
         if (count($args) > 0) {
             $lfArg = $lf;
+            $strArg = $str;
         }
         if (!$pretty or count($args) + count($this->use) > 0) {
             $neck = ' ';
@@ -251,7 +253,7 @@ class UserFunction implements Renderable
 
         return $str . 'function ' . $this->name . '(' . $lfArg
             . implode(',' . $lfArg, $args) . $lfArg
-            . ')' . $ret . $neck
+            . $strArg . ')' . $ret . $neck
             . $this->renderBody($pretty, $indent);
     }
 
@@ -262,8 +264,12 @@ class UserFunction implements Renderable
         }
 
         $str = str_repeat(' ', $indent * 4);
+        $ret = '';
+        if (count($this->args) === 0) {
+            $ret = $str;
+        }
 
-        return $str . "{\n"
+        return $ret . "{\n"
             . $this->body->render($pretty, $indent+1)
             . "\n" . $str . '}';
     }
