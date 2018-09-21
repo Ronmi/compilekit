@@ -71,6 +71,31 @@ class Block implements Renderable
     }
 
     /**
+     * Add another Renderable as child block, which forces one more indent level.
+     */
+    public function child(Renderable $child): Block
+    {
+        return $this->append(
+            new class($child) implements Renderable {
+                private $r;
+
+                public function __construct(Renderable $r)
+                {
+                    $this->r = $r;
+                }
+
+                public function render(bool $p = false, int $i = 0): string
+                {
+                    if ($i < 0) {
+                        $i = 0;
+                    }
+                    return $this->r->render($p, $i+1);
+                }
+            }
+        );
+    }
+
+    /**
      * @see Renderable
      */
     public function render(bool $pretty = false, int $lv = 0): string

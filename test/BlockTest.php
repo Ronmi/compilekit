@@ -22,6 +22,24 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expect, $actual);
     }
 
+    public function testChild()
+    {
+        $f = (new Block)->line('$a=1;')->child((new Block())->line('$b=$a;'));
+        $expect = '$a=1;$b=$a;';
+        $actual = $f->render();
+        $this->assertEquals($expect, $actual, 'no format');
+
+        $expect = '$a=1;
+    $b=$a;';
+        $actual = $f->render(true);
+        $this->assertEquals($expect, $actual, 'pretty');
+
+        $expect = '    $a=1;
+        $b=$a;';
+        $actual = $f->render(true, 1);
+        $this->assertEquals($expect, $actual, 'indent');
+    }
+
     public function testPretty()
     {
         $f = (new Block())->line('$a=1;', '$b=$a;');
