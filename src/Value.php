@@ -26,6 +26,10 @@ class Value implements Renderable
             return $value;
         }
 
+        if ($value instanceof Compilable) {
+            return (new self)->by($value);
+        }
+
         return (new self)->bind($value);
     }
 
@@ -119,12 +123,35 @@ class Value implements Renderable
     }
 
     /**
+     * Using Compilable to generate php code.
+     *
+     * Value uses "late-compile" working flow: $c->compile() will be called in
+     * Value::render, not here.
+     *
+     *     $b = (new Block)->line('$a = 1;');
+     *     $v = (new Value)->by($b);
+     *     $b->line('$b = $a;');
+     *     $v->render(); // $a = 1;$b = $a;
+     *
+     * @param $c Compilable
+     */
+    public function by(Compilable $c): Value
+    {
+        $this->ret = $c;
+        return $this;
+    }
+
+    /**
      * @see Renderable
      */
     public function render(bool $pretty = false, int $indent = 0): string
     {
         if ($this->ret instanceof Renderable) {
             return $this->ret->render($pretty, $indent);
+        }
+
+        if ($this->ret instanceof Compilable) {
+            return $this->ret->compile()->render($pretty, $indent);
         }
 
         $str = '';

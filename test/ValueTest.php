@@ -4,6 +4,8 @@ namespace FruitTest\CompileKit;
 
 use Fruit\CompileKit\Value;
 use Fruit\CompileKit\FunctionCall;
+use Fruit\CompileKit\Compilable;
+use Fruit\CompileKit\Renderable;
 
 class ValueTest extends \PHPUnit\Framework\TestCase
 {
@@ -53,6 +55,21 @@ class ValueTest extends \PHPUnit\Framework\TestCase
         $expect = '    1';
         $actual = $v->render(true, 1);
         $this->assertEquals($expect, $actual, 'indented');
+    }
+
+    public function testBy()
+    {
+        $v = (new Value)->by(
+            new class implements Compilable {
+                public function compile(): Renderable
+                {
+                    return Value::as('exit;');
+                }
+            }
+        );
+        $expect = 'exit;';
+        $actual = $v->render();
+        $this->assertEquals($expect, $actual);
     }
 
     public function testStmt()
