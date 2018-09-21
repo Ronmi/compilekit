@@ -34,6 +34,36 @@ class Value implements Renderable
     }
 
     /**
+     * Helper to create assignment statement.
+     */
+    public static function assign(Renderable $to, Renderable $from): Renderable
+    {
+        return new class($to, $from) implements Renderable {
+            private $t;
+            private $f;
+
+            public function __construct(Renderable $to, Renderable $from)
+            {
+                $this->t = $to;
+                $this->f = $from;
+            }
+
+            public function render(bool $p = false, int $i = 0): string
+            {
+                if ($i < 0) {
+                    $i = 0;
+                }
+                if (!$p) {
+                    $i = 0;
+                }
+                return $this->t->render($p, $i)
+                    . ' = '
+                    . substr($this->f->render($p, $i), $i*4) . ';';
+            }
+        };
+    }
+
+    /**
      * Helper to convert an expression to statement by appending a colon.
      */
     public static function stmt(Renderable ...$r): Renderable

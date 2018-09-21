@@ -87,4 +87,15 @@ class ValueTest extends \PHPUnit\Framework\TestCase
         $actual = $v->render(true, 1);
         $this->assertEquals($expect, $actual);
     }
+
+    public function testAssign()
+    {
+        $v = Value::assign(
+            Value::as('$a'),
+            Value::of(1)
+        );
+        $expect = '    $a = 1;';
+        $actual = $v->render(true, 1);
+        $this->assertEquals($expect, $actual);
+    }
 }
