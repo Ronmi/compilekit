@@ -101,7 +101,7 @@ class UserClass implements Renderable
     /**
      * Add a method to this class.
      */
-    public function can(string $name, string $visibility): UserMethod
+    public function can(string $name, string $visibility = 'public'): UserMethod
     {
         return $this->addMethod($name, $visibility, false);
     }
@@ -109,7 +109,7 @@ class UserClass implements Renderable
     /**
      * Add a static method to this class.
      */
-    public function canStatic(string $name, string $visibility): UserMethod
+    public function canStatic(string $name, string $visibility = 'public'): UserMethod
     {
         return $this->addMethod($name, $visibility, true);
     }
