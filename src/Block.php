@@ -8,6 +8,31 @@ namespace Fruit\CompileKit;
 class Block implements Renderable
 {
     private $body = [];
+    private $renderHeader = '';
+
+    /**
+     * set this block as a php source file.
+     *
+     * By calling this method, Block::render will return php open tag at beginning.
+     */
+    public function asFile(): Block
+    {
+        $this->renderHeader = '<?php' . "\n";
+        return $this;
+    }
+
+    /**
+     * set this block as a php script file
+     *
+     * By calling this method, Block::render will return hashbang and php open tag
+     * at beginning.
+     */
+    public function asScript(): Block
+    {
+        $this->renderHeader = "#!/usr/bin/env php\n" .
+            '<?php' . "\n";
+        return $this;
+    }
 
     /**
      * Append a line of php code to this code block.
@@ -51,7 +76,7 @@ class Block implements Renderable
     public function render(bool $pretty = false, int $lv = 0): string
     {
         if (!$pretty) {
-            return implode('', array_map(function ($b) {
+            return $this->renderHeader . implode('', array_map(function ($b) {
                 if ($b instanceof Renderable) {
                     return $b->render(false);
                 }
@@ -76,7 +101,7 @@ class Block implements Renderable
             $ret .= $buf;
         }
 
-        return substr($ret, 1);
+        return $this->renderHeader . substr($ret, 1);
     }
 
     /**

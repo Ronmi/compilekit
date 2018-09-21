@@ -107,4 +107,25 @@ $b=$a;';
         $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }
+
+    public function testAsFile()
+    {
+        $f = (new Block)
+            ->reqOnceAbs('vendor/autoload.php')
+            ->asFile();
+        $expect = '<?php' . "\nrequire_once('vendor/autoload.php');";
+        $actual = $f->render();
+        $this->assertEquals($expect, $actual);
+    }
+
+    public function testAsScript()
+    {
+        $f = (new Block)
+            ->reqOnceAbs('vendor/autoload.php')
+            ->asScript();
+        $expect = '#!/usr/bin/env php' . "\n"
+            . '<?php' . "\nrequire_once('vendor/autoload.php');";
+        $actual = $f->render();
+        $this->assertEquals($expect, $actual);
+    }
 }
