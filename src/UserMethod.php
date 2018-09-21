@@ -12,6 +12,13 @@ class UserMethod extends UserFunction
     private $visibility;
     private $static;
 
+    public static function __set_state(array $data)
+    {
+        $ret = new self($data['name'], $data['visibility'], $data['static']);
+        $ret->restore($data);
+        return $ret;
+    }
+
     /**
      * The constructor.
      *

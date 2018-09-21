@@ -9,6 +9,15 @@ class Value implements Renderable
 {
     private $ret = '';
 
+    public static function __set_state(array $data)
+    {
+        $ret = new self();
+        foreach ($data as $k => $v) {
+            $ret->$k = $v;
+        }
+        return $ret;
+    }
+
     /**
      * Helper to create Renderable from raw php code.
      */

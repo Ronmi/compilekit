@@ -31,6 +31,23 @@ class UserFunction implements Renderable
     private $body;
     private $use = [];
 
+    protected function restore(array $data)
+    {
+        $this->args = $data['args'];
+        $this->returnType = $data['returnType'];
+        $this->body = $data['body'];
+        $this->use = $data['use'];
+    }
+
+    public static function __set_state(array $data)
+    {
+        $ret = new self();
+        foreach ($data as $k => $v) {
+            $ret->$k = $v;
+        }
+        return $ret;
+    }
+
     /**
      * The constructor.
      *

@@ -9,6 +9,18 @@ class AnonymousClass extends UserClass
 {
     private $args = [];
 
+    public static function __set_state(array $data)
+    {
+        $ret = new self();
+        foreach ($data as $k => $v) {
+            if ($k === 'name') {
+                continue;
+            }
+            $ret->$k = $v;
+        }
+        return $ret;
+    }
+
     public function __construct()
     {
         parent::__construct('');

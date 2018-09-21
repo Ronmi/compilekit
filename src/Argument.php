@@ -12,6 +12,15 @@ class Argument implements Renderable
     private $typeHint = '';
     private $defaultValue;
 
+    public static function __set_state(array $data)
+    {
+        $ret = new self();
+        foreach ($data as $k => $v) {
+            $ret->$k = $v;
+        }
+        return $ret;
+    }
+
     public function __construct(string $name)
     {
         if ($name[0] !== '$') {

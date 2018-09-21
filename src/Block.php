@@ -10,6 +10,14 @@ class Block implements Renderable
     private $body = [];
     private $renderHeader = '';
 
+    public static function __set_state(array $data)
+    {
+        $ret = new self;
+        $ret->body = $data['body'];
+        $ret->renderHeader = $data['renderHeader'];
+        return $ret;
+    }
+
     /**
      * set this block as a php source file.
      *

@@ -14,6 +14,15 @@ class FunctionCall implements Renderable
     private $name;
     private $args = [];
 
+    public static function __set_state(array $data)
+    {
+        $ret = new self('');
+        foreach ($data as $k => $v) {
+            $ret->$k = $v;
+        }
+        return $ret;
+    }
+
     public function __construct(string $target)
     {
         $this->name = $target;
