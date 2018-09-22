@@ -36,7 +36,7 @@ class FunctionCall implements Renderable
      * @see FunctionCall::arg
      * @param $vals string[] php codes to pass.
      */
-    public function rawArg(string ...$vals): FunctionCall
+    public function rawArg(string ...$vals): self
     {
         foreach ($vals as $v) {
             array_push($this->args, Value::as($v));
@@ -55,7 +55,7 @@ class FunctionCall implements Renderable
      * @see FunctionCall::rawArg
      * @param $vals string[] php codes to pass.
      */
-    public function arg(...$vals): FunctionCall
+    public function arg(...$vals): self
     {
         foreach ($vals as $v) {
             array_push($this->args, Value::of($v));

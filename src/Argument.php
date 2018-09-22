@@ -34,7 +34,7 @@ class Argument implements Renderable
     /**
      * Set type-hinting. Pass empty string to disable type-hinting.
      */
-    public function type(string $type): Argument
+    public function type(string $type): self
     {
         $this->typeHint = $type;
         return $this;
@@ -43,7 +43,7 @@ class Argument implements Renderable
     /**
      * Set default value.
      */
-    public function defaults(): Value
+    public function defaults(): self
     {
         return $this->defaultValue;
     }
@@ -51,7 +51,7 @@ class Argument implements Renderable
     /**
      * Helper for Argument::defaults.
      */
-    public function rawDefault(string $val): Argument
+    public function rawDefault(string $val): self
     {
         $this->defaults()->raw($val);
         return $this;
@@ -60,7 +60,7 @@ class Argument implements Renderable
     /**
      * Helper for Argument::defaults.
      */
-    public function bindDefault($val): Argument
+    public function bindDefault($val): self
     {
         $this->defaults()->bind($val);
         return $this;
@@ -69,7 +69,7 @@ class Argument implements Renderable
     /**
      * Helper for Argument::defaults.
      */
-    public function setDefault($val): Argument
+    public function setDefault($val): self
     {
         $this->defaults()->set($val);
         return $this;

@@ -133,7 +133,7 @@ class Value implements Renderable
      *
      * @param $code string raw PHP code.
      */
-    public function raw(string $code): Value
+    public function raw(string $code): self
     {
         $this->ret = $code;
         return $this;
@@ -144,7 +144,7 @@ class Value implements Renderable
      *
      * @param $val mixed value to be var_export'ed.
      */
-    public function bind($val): Value
+    public function bind($val): self
     {
         $this->ret = var_export($val, true);
         return $this;
@@ -155,7 +155,7 @@ class Value implements Renderable
      *
      * @param $r Renderable
      */
-    public function set(Renderable $r): Value
+    public function set(Renderable $r): self
     {
         $this->ret = $r;
         return $this;
@@ -174,7 +174,7 @@ class Value implements Renderable
      *
      * @param $c Compilable
      */
-    public function by(Compilable $c): Value
+    public function by(Compilable $c): self
     {
         $this->ret = $c;
         return $this;

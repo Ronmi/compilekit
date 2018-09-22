@@ -90,7 +90,7 @@ class UserClass implements Renderable
         string $visibility = 'public',
         bool $static = false,
         string $default = ''
-    ): UserClass {
+    ): self {
         $this->addProp($name, $visibility, $static)->rawDefault($default);
         return $this;
     }
@@ -98,7 +98,7 @@ class UserClass implements Renderable
     /**
      * Add methods to this class.
      */
-    public function method(UserMethod ...$methods): UserClass
+    public function method(UserMethod ...$methods): self
     {
         foreach ($methods as $m) {
             array_push($this->methods, $m);
@@ -139,7 +139,7 @@ class UserClass implements Renderable
      * Since you cannot use complex value as constants, it supports only raw php
      * code to initialize constant.
      */
-    public function const(string $name, string $val): UserClass
+    public function const(string $name, string $val): self
     {
         array_push($this->consts, $name . ' = ' . $val);
 
@@ -151,7 +151,7 @@ class UserClass implements Renderable
      *
      * You MUST take care of namespace.
      */
-    public function extends(string $cls): UserClass
+    public function extends(string $cls): self
     {
         $this->parent = $cls;
         return $this;
@@ -162,7 +162,7 @@ class UserClass implements Renderable
      *
      * You MUST take care of namespace.
      */
-    public function implements(string ...$faces): UserClass
+    public function implements(string ...$faces): self
     {
         foreach ($faces as $f) {
             array_push($this->faces, $f);
@@ -176,7 +176,7 @@ class UserClass implements Renderable
      *
      * You MUST take care of namespace.
      */
-    public function use(string ...$traits): UserClass
+    public function use(string ...$traits): self
     {
         foreach ($traits as $t) {
             array_push($this->traits, $t);

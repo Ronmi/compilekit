@@ -23,7 +23,7 @@ class Block implements Renderable
      *
      * By calling this method, Block::render will return php open tag at beginning.
      */
-    public function asFile(): Block
+    public function asFile(): self
     {
         $this->renderHeader = '<?php' . "\n";
         return $this;
@@ -35,7 +35,7 @@ class Block implements Renderable
      * By calling this method, Block::render will return hashbang and php open tag
      * at beginning.
      */
-    public function asScript(): Block
+    public function asScript(): self
     {
         $this->renderHeader = "#!/usr/bin/env php\n" .
             '<?php' . "\n";
@@ -47,7 +47,7 @@ class Block implements Renderable
      *
      * @param $lines string[] php codes
      */
-    public function line(string ...$lines): Block
+    public function line(string ...$lines): self
     {
         foreach ($lines as $line) {
             array_push($this->body, $line);
@@ -59,7 +59,7 @@ class Block implements Renderable
     /**
      * A helper to add empty line.
      */
-    public function space(): Block
+    public function space(): self
     {
         return $this->line('');
     }
@@ -69,7 +69,7 @@ class Block implements Renderable
      *
      * @param $blocks Renderable[] php codes
      */
-    public function append(Renderable ...$blocks): Block
+    public function append(Renderable ...$blocks): self
     {
         foreach ($blocks as $block) {
             array_push($this->body, $block);
@@ -81,7 +81,7 @@ class Block implements Renderable
     /**
      * Add another Renderable as child block, which forces one more indent level.
      */
-    public function child(Renderable $child): Block
+    public function child(Renderable $child): self
     {
         return $this->append(
             new class($child) implements Renderable {
@@ -142,7 +142,7 @@ class Block implements Renderable
      *
      * @param $namespace string namespace.
      */
-    public function ns(string $namespace): Block
+    public function ns(string $namespace): self
     {
         return $this->line('namespace ' . $namespace . ';');
     }
@@ -153,7 +153,7 @@ class Block implements Renderable
      * @param $cls string full class name to use.
      * @param $as string use it as. (optional)
      */
-    public function use(string $cls, string $as = ''): Block
+    public function use(string $cls, string $as = ''): self
     {
         $str = 'use ' . $cls;
         if ($as !== '') {
@@ -166,7 +166,7 @@ class Block implements Renderable
     /**
      * Helper to add return statement.
      */
-    public function return(Renderable $value): Block
+    public function return(Renderable $value): self
     {
         return $this->append(Value::stmt(
             Value::as('return'),
@@ -182,7 +182,7 @@ class Block implements Renderable
      *
      * @param $file string file path.
      */
-    public function req(string $file): Block
+    public function req(string $file): self
     {
         if ($file[0] !== '/') {
             $file = '/' . $file;
@@ -202,7 +202,7 @@ class Block implements Renderable
      *
      * @param $file string file path.
      */
-    public function reqOnce(string $file): Block
+    public function reqOnce(string $file): self
     {
         if ($file[0] !== '/') {
             $file = '/' . $file;
@@ -222,7 +222,7 @@ class Block implements Renderable
      *
      * @param $file string file path.
      */
-    public function reqAbs(string $file): Block
+    public function reqAbs(string $file): self
     {
         return $this->line(
             (new FunctionCall('require'))
@@ -239,7 +239,7 @@ class Block implements Renderable
      *
      * @param $file string file path.
      */
-    public function reqOnceAbs(string $file): Block
+    public function reqOnceAbs(string $file): self
     {
         return $this->line(
             (new FunctionCall('require_once'))

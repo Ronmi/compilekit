@@ -31,7 +31,7 @@ class AnonymousClass extends UserClass
      *
      * @param $args string[] raw php codes.
      */
-    public function rawArgs(string ...$args): AnonymousClass
+    public function rawArgs(string ...$args): self
     {
         foreach ($args as $a) {
             array_push($this->args, (new Value)->raw($a));
@@ -45,7 +45,7 @@ class AnonymousClass extends UserClass
      *
      * @param $args mixed[] arguments to pass, will be var_export'ed when rendering.
      */
-    public function bindArgs(...$args): AnonymousClass
+    public function bindArgs(...$args): self
     {
         foreach ($args as $a) {
             array_push($this->args, (new Value)->bind($a));
@@ -57,7 +57,7 @@ class AnonymousClass extends UserClass
     /**
      * Passing some Renderable to constructor.
      */
-    public function setArgs(Renderable ...$args): AnonymousClass
+    public function setArgs(Renderable ...$args): self
     {
         foreach ($args as $a) {
             array_push($this->args, $a);

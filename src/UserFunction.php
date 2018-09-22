@@ -69,7 +69,7 @@ class UserFunction implements Renderable
      *
      * @param $vars string variable names to inherit
      */
-    public function use(string ...$vars): UserFunction
+    public function use(string ...$vars): self
     {
         foreach ($vars as $v) {
             if ($v[0] !== '$') {
@@ -117,7 +117,7 @@ class UserFunction implements Renderable
      * @param $type string type hint of the argument. (optional)
      * @param $default string PHP SOURCE CODE of default value of the argument. (optional)
      */
-    public function rawArg(string $name, string $type = '', string $default = ''): UserFunction
+    public function rawArg(string $name, string $type = '', string $default = ''): self
     {
         $this->accept($name)
             ->type($type)
@@ -140,7 +140,7 @@ class UserFunction implements Renderable
      * @param $default string default value of the argument. MUST COMPITABLE WITH var_export().
      * @param $type string type hint of the argument. (optional)
      */
-    public function bindArg(string $name, $default, string $type = ''): UserFunction
+    public function bindArg(string $name, $default, string $type = ''): self
     {
         $this->accept($name)
             ->type($type)
@@ -154,7 +154,7 @@ class UserFunction implements Renderable
      *
      * @param $type string return type
      */
-    public function return(string $type): UserFunction
+    public function return(string $type): self
     {
         $this->returnType = $type;
 
@@ -166,7 +166,7 @@ class UserFunction implements Renderable
      *
      * @param $line string php code
      */
-    public function line(string $line): UserFunction
+    public function line(string $line): self
     {
         $this->body->line($line);
 
@@ -178,7 +178,7 @@ class UserFunction implements Renderable
      *
      * @param $block string array of php codes
      */
-    public function block(array $block): UserFunction
+    public function block(array $block): self
     {
         $this->body->line(...$block);
 
@@ -190,7 +190,7 @@ class UserFunction implements Renderable
      *
      * @param $block string array of php codes
      */
-    public function append(Block $block): UserFunction
+    public function append(Block $block): self
     {
         $this->body->append($block);
 
