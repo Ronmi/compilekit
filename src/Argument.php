@@ -33,6 +33,8 @@ class Argument implements Renderable
 
     /**
      * Set type-hinting. Pass empty string to disable type-hinting.
+     *
+     * @return self
      */
     public function type(string $type): self
     {
@@ -42,6 +44,8 @@ class Argument implements Renderable
 
     /**
      * Set default value.
+     *
+     * @return self
      */
     public function defaults(): self
     {
@@ -50,6 +54,8 @@ class Argument implements Renderable
 
     /**
      * Helper for Argument::defaults.
+     *
+     * @return self
      */
     public function rawDefault(string $val): self
     {
@@ -59,6 +65,8 @@ class Argument implements Renderable
 
     /**
      * Helper for Argument::defaults.
+     *
+     * @return self
      */
     public function bindDefault($val): self
     {
@@ -68,6 +76,8 @@ class Argument implements Renderable
 
     /**
      * Helper for Argument::defaults.
+     *
+     * @return self
      */
     public function setDefault($val): self
     {
@@ -77,6 +87,7 @@ class Argument implements Renderable
 
     /**
      * @see Renderable
+     * @return string of generated php code.
      */
     public function render(bool $pretty = false, int $indent = 0): string
     {

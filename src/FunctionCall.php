@@ -35,6 +35,7 @@ class FunctionCall implements Renderable
      *
      * @see FunctionCall::arg
      * @param $vals string[] php codes to pass.
+     * @return self
      */
     public function rawArg(string ...$vals): self
     {
@@ -54,6 +55,7 @@ class FunctionCall implements Renderable
      *
      * @see FunctionCall::rawArg
      * @param $vals string[] php codes to pass.
+     * @return self
      */
     public function arg(...$vals): self
     {
@@ -64,6 +66,9 @@ class FunctionCall implements Renderable
         return $this;
     }
 
+    /**
+     * @see Renderable
+     * @return string of generated php code.
     public function render(bool $pretty = false, int $indent = 0): string
     {
         $str = '';

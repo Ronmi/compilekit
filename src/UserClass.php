@@ -38,6 +38,7 @@ class UserClass implements Renderable
      *
      * @param $name string property name.
      * @param $visibility string property visibility, default to public.
+     * @return Argument instance.
      */
     public function has(string $name, string $visibility = 'public'): Argument
     {
@@ -55,6 +56,7 @@ class UserClass implements Renderable
      *
      * @param $name string property name.
      * @param $visibility string property visibility, default to public.
+     * @return Argument instance.
      */
     public function hasStatic(
         string $name,
@@ -84,6 +86,7 @@ class UserClass implements Renderable
      * @param $visibility string property visibility, default to public.
      * @param $static bool true if this is a static property, default to false.
      * @param $default string php code to initialize property at difinition. (optional)
+     * @return self
      */
     public function prop(
         string $name,
@@ -97,6 +100,8 @@ class UserClass implements Renderable
 
     /**
      * Add methods to this class.
+     *
+     * @return self
      */
     public function method(UserMethod ...$methods): self
     {
@@ -109,6 +114,8 @@ class UserClass implements Renderable
 
     /**
      * Add a method to this class.
+     *
+     * @return UserMethod instance.
      */
     public function can(string $name, string $visibility = 'public'): UserMethod
     {
@@ -117,6 +124,8 @@ class UserClass implements Renderable
 
     /**
      * Add a static method to this class.
+     *
+     * @return UserMethod instance.
      */
     public function canStatic(string $name, string $visibility = 'public'): UserMethod
     {
@@ -138,6 +147,8 @@ class UserClass implements Renderable
      *
      * Since you cannot use complex value as constants, it supports only raw php
      * code to initialize constant.
+     *
+     * @return self
      */
     public function const(string $name, string $val): self
     {
@@ -150,6 +161,8 @@ class UserClass implements Renderable
      * Set the parent class of this class.
      *
      * You MUST take care of namespace.
+     *
+     * @return self
      */
     public function extends(string $cls): self
     {
@@ -161,6 +174,8 @@ class UserClass implements Renderable
      * Declares the class to implement specified interface.
      *
      * You MUST take care of namespace.
+     *
+     * @return self
      */
     public function implements(string ...$faces): self
     {
@@ -175,6 +190,8 @@ class UserClass implements Renderable
      * Using traits in this class.
      *
      * You MUST take care of namespace.
+     *
+     * @return self
      */
     public function use(string ...$traits): self
     {
@@ -189,6 +206,7 @@ class UserClass implements Renderable
      * Since PHP does not support inner class, indent level is forced to be 0.
      *
      * @see Renderable
+     * @return string of generated php code.
      */
     public function render(bool $pretty = false, int $indent = 0): string
     {

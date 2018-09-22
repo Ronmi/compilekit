@@ -41,6 +41,7 @@ class UserMethod extends UserFunction
 
     /**
      * @see UserFunction::render
+     * @return string of generated php code
      */
     public function render(bool $pretty = false, int $indent = 0): string
     {

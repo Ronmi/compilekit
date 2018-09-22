@@ -22,6 +22,8 @@ class Block implements Renderable
      * set this block as a php source file.
      *
      * By calling this method, Block::render will return php open tag at beginning.
+     *
+     * @return self
      */
     public function asFile(): self
     {
@@ -34,6 +36,8 @@ class Block implements Renderable
      *
      * By calling this method, Block::render will return hashbang and php open tag
      * at beginning.
+     *
+     * @return self
      */
     public function asScript(): self
     {
@@ -46,6 +50,7 @@ class Block implements Renderable
      * Append a line of php code to this code block.
      *
      * @param $lines string[] php codes
+     * @return self
      */
     public function line(string ...$lines): self
     {
@@ -58,6 +63,8 @@ class Block implements Renderable
 
     /**
      * A helper to add empty line.
+     *
+     * @return self
      */
     public function space(): self
     {
@@ -68,6 +75,7 @@ class Block implements Renderable
      * Append another block of code to this block.
      *
      * @param $blocks Renderable[] php codes
+     * @return self
      */
     public function append(Renderable ...$blocks): self
     {
@@ -80,6 +88,8 @@ class Block implements Renderable
 
     /**
      * Add another Renderable as child block, which forces one more indent level.
+     *
+     * @return self
      */
     public function child(Renderable $child): self
     {
@@ -105,6 +115,7 @@ class Block implements Renderable
 
     /**
      * @see Renderable
+     * @return string of generated php code.
      */
     public function render(bool $pretty = false, int $lv = 0): string
     {

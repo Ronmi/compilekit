@@ -20,6 +20,9 @@ class Value implements Renderable
 
     /**
      * Helper to create Renderable from raw php code.
+     *
+     * @param $code string of raw php code.
+     * @return Renderable instance.
      */
     public static function as(string $code): Renderable
     {
@@ -28,6 +31,15 @@ class Value implements Renderable
 
     /**
      * Helper to convert some values to Renderable.
+     *
+     * It converts $value to Renderable if needed:
+     *
+     * 1. $value is Renderable: not convertion, just return it.
+     * 2. $value is Compilable: same as Value::by($value).
+     * 3. anyother: same as Value::bind($value).
+     *
+     * @param $value mixed value.
+     * @return Renderable instance.
      */
     public static function of($value): Renderable
     {
@@ -44,6 +56,13 @@ class Value implements Renderable
 
     /**
      * Helper to create assignment statement.
+     *
+     *     // result: '$a = $b;'
+     *     Value::assign(Value::as('$a'), Value::as('$b'))->render();
+     *
+     * @param $to Renderable at left side of assignment.
+     * @param $from Renderable at right side of assignment.
+     * @return Renderable instance.
      */
     public static function assign(Renderable $to, Renderable $from): Renderable
     {
@@ -74,6 +93,9 @@ class Value implements Renderable
 
     /**
      * Helper to convert an expression to statement by appending a colon.
+     *
+     * @param $r Renderable to render.
+     * @return Renderable instance.
      */
     public static function stmt(Renderable ...$r): Renderable
     {
@@ -109,7 +131,10 @@ class Value implements Renderable
     }
 
     /**
-     * Helper to prevent pretty formater.
+     * Helper to prevent pretty formatting.
+     *
+     * @param $r Renderable instance.
+     * @return Renderable instance.
      */
     public static function ugly(Renderable $r): Renderable
     {
@@ -132,6 +157,7 @@ class Value implements Renderable
      * Set raw php code.
      *
      * @param $code string raw PHP code.
+     * @return self
      */
     public function raw(string $code): self
     {
@@ -143,6 +169,7 @@ class Value implements Renderable
      * Set php code by converting val with var_export().
      *
      * @param $val mixed value to be var_export'ed.
+     * @return self
      */
     public function bind($val): self
     {
@@ -154,6 +181,7 @@ class Value implements Renderable
      * Using Renderable to generate php code.
      *
      * @param $r Renderable
+     * @return self
      */
     public function set(Renderable $r): self
     {
@@ -173,6 +201,7 @@ class Value implements Renderable
      *     $v->render(); // $a = 1;$b = $a;
      *
      * @param $c Compilable
+     * @return self
      */
     public function by(Compilable $c): self
     {
@@ -182,6 +211,7 @@ class Value implements Renderable
 
     /**
      * @see Renderable
+     * @return string of generated php code.
      */
     public function render(bool $pretty = false, int $indent = 0): string
     {

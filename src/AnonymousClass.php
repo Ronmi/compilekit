@@ -44,6 +44,7 @@ class AnonymousClass extends UserClass
      * Passing some values to constructor.
      *
      * @param $args mixed[] arguments to pass, will be var_export'ed when rendering.
+     * @return self
      */
     public function bindArgs(...$args): self
     {
@@ -56,6 +57,8 @@ class AnonymousClass extends UserClass
 
     /**
      * Passing some Renderable to constructor.
+     *
+     * @return self
      */
     public function setArgs(Renderable ...$args): self
     {
@@ -68,6 +71,7 @@ class AnonymousClass extends UserClass
 
     /**
      * @see Renderable
+     * @return string of generated php code.
      */
     public function render(bool $pretty = false, int $indent = 0): string
     {

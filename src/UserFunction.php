@@ -68,6 +68,7 @@ class UserFunction implements Renderable
      * Only anonymous function will use this. Named function will ignore it.
      *
      * @param $vars string variable names to inherit
+     * @return self
      */
     public function use(string ...$vars): self
     {
@@ -89,6 +90,7 @@ class UserFunction implements Renderable
      *
      * @see UserFunction::arg
      * @param $name string argument name
+     * @return Argument instance.
      */
     public function accept(string $name): Argument
     {
@@ -116,6 +118,7 @@ class UserFunction implements Renderable
      * @param $name string name of the argument.
      * @param $type string type hint of the argument. (optional)
      * @param $default string PHP SOURCE CODE of default value of the argument. (optional)
+     * @return self
      */
     public function rawArg(string $name, string $type = '', string $default = ''): self
     {
@@ -139,6 +142,7 @@ class UserFunction implements Renderable
      * @param $name string name of the argument.
      * @param $default string default value of the argument. MUST COMPITABLE WITH var_export().
      * @param $type string type hint of the argument. (optional)
+     * @return self
      */
     public function bindArg(string $name, $default, string $type = ''): self
     {
@@ -153,6 +157,7 @@ class UserFunction implements Renderable
      * Define return type
      *
      * @param $type string return type
+     * @return self
      */
     public function return(string $type): self
     {
@@ -165,6 +170,7 @@ class UserFunction implements Renderable
      * Append a line of php code to function body.
      *
      * @param $line string php code
+     * @return self
      */
     public function line(string $line): self
     {
@@ -177,6 +183,7 @@ class UserFunction implements Renderable
      * Append multiple lines of php code to function body.
      *
      * @param $block string array of php codes
+     * @return self
      */
     public function block(array $block): self
     {
@@ -189,6 +196,7 @@ class UserFunction implements Renderable
      * Append a block of php code to function body.
      *
      * @param $block string array of php codes
+     * @return self
      */
     public function append(Block $block): self
     {
@@ -198,13 +206,10 @@ class UserFunction implements Renderable
     }
 
     /**
-     * Generate PHP code.
-     *
-     * By default, it generates minimal codes. You can set $pretty to true to
-     * generate PSR2 compitable code format.
-     *
+     * @see Renderable
      * @param $pretty bool true to generate multi-line code, default to false
      * @param $indent int indent level, used if $pretty is true
+     * @return string of generated php code.
      */
     public function render(bool $pretty = false, int $indent = 0): string
     {
