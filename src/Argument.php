@@ -43,11 +43,11 @@ class Argument implements Renderable
     }
 
     /**
-     * Set default value.
+     * Declaring to set default value.
      *
-     * @return self
+     * @return Value instance
      */
-    public function defaults(): self
+    public function defaults(): Value
     {
         return $this->defaultValue;
     }

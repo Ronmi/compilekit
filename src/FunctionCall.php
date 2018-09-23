@@ -69,6 +69,7 @@ class FunctionCall implements Renderable
     /**
      * @see Renderable
      * @return string of generated php code.
+     */
     public function render(bool $pretty = false, int $indent = 0): string
     {
         $str = '';
