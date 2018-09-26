@@ -14,6 +14,18 @@ class FunctionCall implements Renderable
     private $name;
     private $args = [];
 
+    /**
+     * Provide readonly access to function name.
+     */
+    public function __get(string $name)
+    {
+        if ($name === 'name') {
+            return $this->name;
+        }
+
+        trigger_error($name . ' is not a valid property of FunctionCall.');
+    }
+
     public static function __set_state(array $data)
     {
         $ret = new self('');

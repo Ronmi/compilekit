@@ -12,6 +12,14 @@ class Argument implements Renderable
     private $typeHint = '';
     private $defaultValue;
 
+    /**
+     * Provide readonly access to private properties.
+     */
+    public function __get(string $name)
+    {
+        return $this->$name;
+    }
+
     public static function __set_state(array $data)
     {
         $ret = new self();

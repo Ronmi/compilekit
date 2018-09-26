@@ -102,4 +102,13 @@ class UserClassTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($expect, $actual);
     }
+
+    public function testGetMethod()
+    {
+        $c = new UserClass('A');
+        $expect = $c->can('b');
+        $c->can('c');
+        $actual = $c->getMethod('b');
+        $this->assertEquals($expect, $actual);
+    }
 }

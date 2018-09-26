@@ -15,6 +15,38 @@ class UserClass implements Renderable
     protected $consts = [];
     protected $traits = [];
 
+    /**
+     * Provide readonly access to class name and parent class.
+     */
+    public function __get(string $name)
+    {
+        if ($name === 'name') {
+            return $this->name;
+        }
+        if ($name === 'parent') {
+            return $this->parent;
+        }
+
+        trigger_error($name . ' is not a valid property of UserClass.');
+    }
+
+    /**
+     * Get specified method.
+     *
+     * @param $name string method name.
+     * @return UserMethod instance.
+     */
+    public function getMethod(string $name): UserMethod
+    {
+        foreach ($this->methods as $m) {
+            if ($m->name === $name) {
+                return $m;
+            }
+        }
+
+        trigger_error($name . ' is not a valid method.');
+    }
+
     public static function __set_state(array $data)
     {
         $ret = new self('');

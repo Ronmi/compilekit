@@ -12,6 +12,18 @@ class UserMethod extends UserFunction
     private $visibility;
     private $static;
 
+    /**
+     * Provide readonly access to private properties.
+     */
+    public function __get(string $name)
+    {
+        if (in_array($name, ['visibility', 'static'])) {
+            return $this->$name;
+        }
+
+        return parent::__get($name);
+    }
+
     public static function __set_state(array $data)
     {
         $ret = new self($data['name'], $data['visibility'], $data['static']);

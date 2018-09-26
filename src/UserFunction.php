@@ -31,6 +31,18 @@ class UserFunction implements Renderable
     private $body;
     private $use = [];
 
+    /**
+     * Provide readonly access to private properties.
+     */
+    public function __get(string $name)
+    {
+        if (in_array($name, ['name', 'returnType', 'body'])) {
+            return $this->$name;
+        }
+
+        trigger_error($name . ' is not a valid property of UserFunction');
+    }
+
     protected function restore(array $data)
     {
         $this->args = $data['args'];
