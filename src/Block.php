@@ -19,6 +19,86 @@ class Block implements Renderable
     }
 
     /**
+     * Helper to create assignment statement.
+     *
+     *     // result: '$a = $b;'
+     *     Block::assign(Value::as('$a'), Value::as('$b'))->render();
+     *
+     * @param $to Renderable at left side of assignment.
+     * @param $from Renderable at right side of assignment.
+     * @return self
+     */
+    public function assign(Renderable $to, Renderable $from): self
+    {
+        return $this->append(
+            new class($to, $from) implements Renderable {
+                private $t;
+                private $f;
+
+                public function __construct(Renderable $to, Renderable $from)
+                {
+                    $this->t = $to;
+                    $this->f = $from;
+                }
+
+                public function render(bool $p = false, int $i = 0): string
+                {
+                    if ($i < 0) {
+                        $i = 0;
+                    }
+                    if (!$p) {
+                        $i = 0;
+                    }
+                    return $this->t->render($p, $i)
+                        . ' = '
+                        . substr($this->f->render($p, $i), $i*4) . ';';
+                }
+            }
+        );
+    }
+
+    /**
+     * Helper to convert an expression to statement by appending a colon.
+     *
+     * @param $r Renderable to render.
+     * @return self
+     */
+    public function stmt(Renderable ...$r): self
+    {
+        return $this->append(
+            new class($r) implements Renderable {
+                private $r;
+
+                public function __construct(array $r)
+                {
+                    $this->r = $r;
+                }
+
+                public function render(bool $p = false, int $i = 0): string
+                {
+                    if ($i < 0) {
+                        $i = 0;
+                    }
+                    $str = '';
+                    if ($p) {
+                        $str = str_repeat(' ', $i * 4);
+                    }
+
+                    $arr = array_map(function (Renderable $r) use ($p, $i) {
+                        $ret = $r->render($p, $i);
+                        if ($p and $i > 0) {
+                            $ret = substr($ret, $i * 4);
+                        }
+                        return $ret;
+                    }, $this->r);
+
+                    return $str . implode(' ', $arr) . ';';
+                }
+            }
+        );
+    }
+
+    /**
      * set this block as a php source file.
      *
      * By calling this method, Block::render will return php open tag at beginning.

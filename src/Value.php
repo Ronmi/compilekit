@@ -60,74 +60,26 @@ class Value implements Renderable
      *     // result: '$a = $b;'
      *     Value::assign(Value::as('$a'), Value::as('$b'))->render();
      *
+     * @deprecated use Block::assign instead.
      * @param $to Renderable at left side of assignment.
      * @param $from Renderable at right side of assignment.
      * @return Renderable instance.
      */
     public static function assign(Renderable $to, Renderable $from): Renderable
     {
-        return new class($to, $from) implements Renderable {
-            private $t;
-            private $f;
-
-            public function __construct(Renderable $to, Renderable $from)
-            {
-                $this->t = $to;
-                $this->f = $from;
-            }
-
-            public function render(bool $p = false, int $i = 0): string
-            {
-                if ($i < 0) {
-                    $i = 0;
-                }
-                if (!$p) {
-                    $i = 0;
-                }
-                return $this->t->render($p, $i)
-                    . ' = '
-                    . substr($this->f->render($p, $i), $i*4) . ';';
-            }
-        };
+        return (new Block)->assign($to, $from);
     }
 
     /**
      * Helper to convert an expression to statement by appending a colon.
      *
+     * @deprecated use Block::stmt instead.
      * @param $r Renderable to render.
      * @return Renderable instance.
      */
     public static function stmt(Renderable ...$r): Renderable
     {
-        return new class($r) implements Renderable {
-            private $r;
-
-            public function __construct(array $r)
-            {
-                $this->r = $r;
-            }
-
-            public function render(bool $p = false, int $i = 0): string
-            {
-                if ($i < 0) {
-                    $i = 0;
-                }
-                $str = '';
-                if ($p) {
-                    $str = str_repeat(' ', $i * 4);
-                }
-
-                $arr = array_map(function (Renderable $r) use ($p, $i) {
-                    $ret = $r->render($p, $i);
-                    if ($p and $i > 0) {
-                        $ret = substr($ret, $i * 4);
-                    }
-                    return $ret;
-                }, $this->r);
-
-                return $str . implode(' ', $arr) . ';';
-            }
-        };
+        return (new Block)->stmt(...$r);
     }
 
     /**

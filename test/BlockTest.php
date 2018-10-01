@@ -3,6 +3,8 @@
 namespace FruitTest\CompileKit;
 
 use Fruit\CompileKit\Block;
+use Fruit\CompileKit\Value;
+use Fruit\CompileKit\FunctionCall;
 
 class BlockTest extends \PHPUnit\Framework\TestCase
 {
@@ -144,6 +146,25 @@ $b=$a;';
         $expect = '#!/usr/bin/env php' . "\n"
             . '<?php' . "\nrequire_once('vendor/autoload.php');";
         $actual = $f->render();
+        $this->assertEquals($expect, $actual);
+    }
+
+    public function testStmt()
+    {
+        $f = (new Block)->stmt(Value::as('return'), new FunctionCall('a'));
+        $expect = '    return a();';
+        $actual = $f->render(true, 1);
+        $this->assertEquals($expect, $actual);
+    }
+
+    public function testAssign()
+    {
+        $v = (new Block)->assign(
+            Value::as('$a'),
+            Value::of(1)
+        );
+        $expect = '    $a = 1;';
+        $actual = $v->render(true, 1);
         $this->assertEquals($expect, $actual);
     }
 }

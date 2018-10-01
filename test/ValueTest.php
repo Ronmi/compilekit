@@ -3,7 +3,6 @@
 namespace FruitTest\CompileKit;
 
 use Fruit\CompileKit\Value;
-use Fruit\CompileKit\FunctionCall;
 use Fruit\CompileKit\Compilable;
 use Fruit\CompileKit\Renderable;
 
@@ -72,29 +71,10 @@ class ValueTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expect, $actual);
     }
 
-    public function testStmt()
-    {
-        $f = Value::stmt(Value::as('return'), new FunctionCall('a'));
-        $expect = '    return a();';
-        $actual = $f->render(true, 1);
-        $this->assertEquals($expect, $actual);
-    }
-
     public function testUgly()
     {
         $v = Value::ugly(Value::as('1'));
         $expect = '1';
-        $actual = $v->render(true, 1);
-        $this->assertEquals($expect, $actual);
-    }
-
-    public function testAssign()
-    {
-        $v = Value::assign(
-            Value::as('$a'),
-            Value::of(1)
-        );
-        $expect = '    $a = 1;';
         $actual = $v->render(true, 1);
         $this->assertEquals($expect, $actual);
     }
