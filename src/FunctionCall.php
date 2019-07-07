@@ -13,6 +13,7 @@ class FunctionCall implements Renderable
 {
     private $name;
     private $args = [];
+    private $wrapAt = 5;
 
     /**
      * Provide readonly access to function name.
@@ -38,6 +39,21 @@ class FunctionCall implements Renderable
     public function __construct(string $target)
     {
         $this->name = $target;
+    }
+
+    /**
+     * Wrap line if number of args >= $num ($num must >= 1)
+     *
+     * By default, we wrap line if number of args >= 5
+     */
+    public function wrapArg(int $num): self
+    {
+        if ($num < 1) {
+            return $this;
+        }
+
+        $this->wrapAt = $num;
+        return $this;
     }
 
     /**
@@ -96,7 +112,7 @@ class FunctionCall implements Renderable
 
         $argc = count($this->args);
         $i = 0;
-        if ($argc > 4) {
+        if ($argc >= $this->wrapAt) {
             $i = $indent + 1;
         }
         $args = array_map(function ($a) use ($pretty, $i, $indent) {
@@ -119,7 +135,7 @@ class FunctionCall implements Renderable
         $sp = ', ';
         $lfArg = '';
         $strArg = '';
-        if ($pretty and $argc > 4) {
+        if ($pretty and $argc >= $this->wrapAt) {
             $sp = ',' . $lf;
             $lfArg = $lf;
             $strArg = $str;
