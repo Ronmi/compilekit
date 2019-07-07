@@ -31,8 +31,7 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
         $f = (new Userfunction())
             ->line('$x = 1;')
             ->append((new Block)->return(Value::as('$x')));
-        $expect = 'function ()
-{
+        $expect = 'function () {
     $x = 1;
     return $x;
 }';
@@ -45,8 +44,7 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
         $f = (new Userfunction())
             ->line('$x = 1;')
             ->block(['return $x;']);
-        $expect = '    function ()
-    {
+        $expect = '    function () {
         $x = 1;
         return $x;
     }';
@@ -72,6 +70,18 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
             ->rawArg('arg5', 'string', '"test"');
         $expect = 'function ($arg1, $arg2, string $arg3, $arg4 = null, string $arg5 = "test") {}';
         $actual = $f->render();
+        $this->assertEquals($expect, $actual);
+    }
+
+    public function test2Args()
+    {
+        $f = (new Userfunction())
+            ->rawArg('arg1')
+            ->rawArg('$arg2');
+        $expect = 'function ($arg1, $arg2) {
+
+}';
+        $actual = $f->render(true);
         $this->assertEquals($expect, $actual);
     }
 
@@ -114,9 +124,7 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
         $actual = $f->render();
         $this->assertEquals($expect, $actual, 'no format');
 
-        $expect = 'function ($a) use (
-    $b
-) {
+        $expect = 'function ($a) use ($b) {
 
 }';
         $actual = $f->render(true);
@@ -132,7 +140,8 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
         $actual = $f->render();
         $this->assertEquals($expect, $actual, 'no format');
 
-        $expect = 'function a($a) {
+        $expect = 'function a($a)
+{
 
 }';
         $actual = $f->render(true);

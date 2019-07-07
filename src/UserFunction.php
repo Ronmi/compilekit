@@ -30,6 +30,7 @@ class UserFunction implements Renderable
     private $returnType = '';
     private $body;
     private $use = [];
+    private $wrapAt = 5;
 
     /**
      * Provide readonly access to private properties.
@@ -58,6 +59,21 @@ class UserFunction implements Renderable
             $ret->$k = $v;
         }
         return $ret;
+    }
+
+    /**
+     * Wrap line if number of args >= $num ($num must >= 1)
+     *
+     * By default, we wrap line if number of args >= 5
+     */
+    public function wrapArg(int $num): self
+    {
+        if ($num < 1) {
+            return $this;
+        }
+
+        $this->wrapAt = $num;
+        return $this;
     }
 
     /**
@@ -244,56 +260,58 @@ class UserFunction implements Renderable
         }
 
         $argc = count($this->args);
+        $nowrap = ($argc >= $this->wrapAt or $this->name === '');
         $i = 0;
-        if ($argc > 4) {
+        if ($argc >= $this->wrapAt) {
             $i = $indent + 1;
         }
         $args = array_map(function ($a) use ($pretty, $i) {
             return $a->render($pretty, $i);
         }, $this->args);
 
+        $usestr = '';
         if ($this->name === '' and count($this->use) > 0) {
             $str2 = '';
             if ($pretty) {
                 $str2 = '    ';
             }
-            $ret = ' use (' . $lf . $str . $str2
-                . implode(',' . $lf . $str . $str2, $this->use) . $lf
-                . $str . ')' . $ret;
+            $usestr = ' use ('
+                . implode(', ', $this->use)
+                . ')';
         }
 
         $lfArg = '';
         $strArg = '';
         $neck = $lf;
         $sp = ', ';
-        if ($pretty and $argc > 4) {
+        if ($pretty and $argc >= $this->wrapAt) {
             $lfArg = $lf;
             $strArg = $str;
             $sp = ',' . $lf;
         }
-        if (!$pretty or count($args) + count($this->use) > 0) {
+        if (!$pretty or ($pretty and $nowrap)) {
             $neck = ' ';
         }
 
         return $str . 'function ' . $this->name . '(' . $lfArg
             . implode($sp, $args) . $lfArg
-            . $strArg . ')' . $ret . $neck
-            . $this->renderBody($pretty, $indent);
+            . $strArg . ')' . $usestr . $ret . $neck
+            . $this->renderBody($pretty, $indent, $nowrap);
     }
 
-    private function renderBody(bool $pretty, int $indent): string
+    private function renderBody(bool $pretty, int $indent, bool $oneline): string
     {
         if (!$pretty) {
             return '{' . $this->body->render() . '}';
         }
 
         $str = str_repeat(' ', $indent * 4);
-        $ret = '';
-        if (count($this->args) === 0) {
-            $ret = $str;
+        $head = $str;
+        if ($oneline) {
+            $head = '';
         }
 
-        return $ret . "{\n"
+        return $head . "{\n"
             . $this->body->render($pretty, $indent+1)
             . "\n" . $str . '}';
     }
