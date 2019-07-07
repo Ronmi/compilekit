@@ -70,7 +70,7 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
             ->rawArg('$arg3', 'string')
             ->rawArg('$arg4', '', 'null')
             ->rawArg('arg5', 'string', '"test"');
-        $expect = 'function ($arg1,$arg2,string $arg3,$arg4 = null,string $arg5 = "test") {}';
+        $expect = 'function ($arg1, $arg2, string $arg3, $arg4 = null, string $arg5 = "test") {}';
         $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }
@@ -114,9 +114,7 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
         $actual = $f->render();
         $this->assertEquals($expect, $actual, 'no format');
 
-        $expect = 'function (
-    $a
-) use (
+        $expect = 'function ($a) use (
     $b
 ) {
 
@@ -134,9 +132,7 @@ class UserFunctionTest extends \PHPUnit\Framework\TestCase
         $actual = $f->render();
         $this->assertEquals($expect, $actual, 'no format');
 
-        $expect = 'function a(
-    $a
-) {
+        $expect = 'function a($a) {
 
 }';
         $actual = $f->render(true);

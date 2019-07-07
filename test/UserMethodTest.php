@@ -52,7 +52,7 @@ class UserMethodTest extends \PHPUnit\Framework\TestCase
             ->rawArg('$arg3', 'string')
             ->rawArg('$arg4', '', 'null')
             ->rawArg('arg5', 'string', '"test"');
-        $expect = 'public function f($arg1,$arg2,string $arg3,$arg4 = null,string $arg5 = "test") {}';
+        $expect = 'public function f($arg1, $arg2, string $arg3, $arg4 = null, string $arg5 = "test") {}';
         $actual = $f->render();
         $this->assertEquals($expect, $actual);
     }

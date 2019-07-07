@@ -243,8 +243,13 @@ class UserFunction implements Renderable
             $indent = 0;
         }
 
-        $args = array_map(function ($a) use ($pretty, $indent) {
-            return $a->render($pretty, $indent+1);
+        $argc = count($this->args);
+        $i = 0;
+        if ($argc > 4) {
+            $i = $indent + 1;
+        }
+        $args = array_map(function ($a) use ($pretty, $i) {
+            return $a->render($pretty, $i);
         }, $this->args);
 
         if ($this->name === '' and count($this->use) > 0) {
@@ -260,16 +265,18 @@ class UserFunction implements Renderable
         $lfArg = '';
         $strArg = '';
         $neck = $lf;
-        if (count($args) > 0) {
+        $sp = ', ';
+        if ($pretty and $argc > 4) {
             $lfArg = $lf;
             $strArg = $str;
+            $sp = ',' . $lf;
         }
         if (!$pretty or count($args) + count($this->use) > 0) {
             $neck = ' ';
         }
 
         return $str . 'function ' . $this->name . '(' . $lfArg
-            . implode(',' . $lfArg, $args) . $lfArg
+            . implode($sp, $args) . $lfArg
             . $strArg . ')' . $ret . $neck
             . $this->renderBody($pretty, $indent);
     }

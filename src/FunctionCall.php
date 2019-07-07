@@ -94,14 +94,19 @@ class FunctionCall implements Renderable
             $lf = "\n";
         }
 
-        $args = array_map(function ($a) use ($pretty, $indent) {
-            if ($a instanceof Renderable) {
-                return $a->render($pretty, $indent+1);
-            }
-
+        $argc = count($this->args);
+        $i = 0;
+        if ($argc > 4) {
+            $i = $indent + 1;
+        }
+        $args = array_map(function ($a) use ($pretty, $i, $indent) {
             $str = '';
             if ($pretty) {
-                $str = str_repeat(' ', ($indent + 1) * 4);
+                $str = str_repeat(' ', $i * 4);
+            }
+
+            if ($a instanceof Renderable) {
+                return $str . ltrim($a->render($pretty, $indent+1));
             }
 
             return $str . $a;
@@ -111,8 +116,17 @@ class FunctionCall implements Renderable
             return $str . $this->name . '()';
         }
 
+        $sp = ', ';
+        $lfArg = '';
+        $strArg = '';
+        if ($pretty and $argc > 4) {
+            $sp = ',' . $lf;
+            $lfArg = $lf;
+            $strArg = $str;
+        }
+
         return $str . $this->name . '('
-            . $lf . implode(',' . $lf, $args)
-            . $lf . $str . ')';
+            . $lfArg . implode($sp, $args)
+            . $lfArg . $strArg . ')';
     }
 }
