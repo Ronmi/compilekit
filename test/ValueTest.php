@@ -8,6 +8,14 @@ use Fruit\CompileKit\Renderable;
 
 class ValueTest extends \PHPUnit\Framework\TestCase
 {
+    public function testNull()
+    {
+        $v = Value::of(null);
+        $expect = 'null';
+        $actual = $v->render();
+        $this->assertEquals($expect, $actual);
+    }
+
     public function testRaw()
     {
         $v = (new Value)->raw('1');

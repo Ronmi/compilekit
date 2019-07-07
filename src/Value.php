@@ -125,7 +125,12 @@ class Value implements Renderable
      */
     public function bind($val): self
     {
-        $this->ret = var_export($val, true);
+        $v = 'null';
+        if ($val !== null) {
+            $v = var_export($val, true);
+        }
+
+        $this->ret = $v;
         return $this;
     }
 
