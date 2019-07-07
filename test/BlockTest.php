@@ -167,4 +167,23 @@ $b=$a;';
         $actual = $v->render(true, 1);
         $this->assertEquals($expect, $actual);
     }
+
+    public function testAssignUgly()
+    {
+        $v = (new Block)->assign(
+            Value::as('$a'),
+            Value::of(1)
+        );
+        $expect = '$a = 1;';
+        $actual = $v->render(false, 1);
+        $this->assertEquals($expect, $actual);
+
+        $v = (new Block)->assign(
+            Value::ugly(Value::as('$a')),
+            Value::ugly((new FunctionCall('new DateTime'))->arg('2019-07-01 00:00:00'))
+        );
+        $actual = $v->render(true, 1);
+        $expect = '    $a = new DateTime(\'2019-07-01 00:00:00\');';
+        $this->assertEquals($expect, $actual);
+    }
 }

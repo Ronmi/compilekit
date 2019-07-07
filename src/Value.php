@@ -100,7 +100,7 @@ class Value implements Renderable
 
             public function render(bool $p = false, int $i = 0): string
             {
-                return $this->r->render();
+                return $this->r->render(false, $i);
             }
         };
     }

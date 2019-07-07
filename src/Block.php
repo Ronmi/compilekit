@@ -49,9 +49,14 @@ class Block implements Renderable
                     if (!$p) {
                         $i = 0;
                     }
-                    return $this->t->render($p, $i)
+                    $indent = '';
+                    if ($p and $i > 0) {
+                        $indent = str_repeat(' ', $i * 4);
+                    }
+
+                    return $indent . $this->t->render(false, $i)
                         . ' = '
-                        . substr($this->f->render($p, $i), $i*4) . ';';
+                        . ltrim($this->f->render($p, $i)) . ';';
                 }
             }
         );
