@@ -157,6 +157,19 @@ $b=$a;';
         $this->assertEquals($expect, $actual);
     }
 
+    public function testStmtUgly()
+    {
+        $f = (new Block)->stmt(Value::as('return'), (new FunctionCall('a'))->arg(1));
+        $expect = 'return a(1);';
+        $actual = $f->render(false, 1);
+        $this->assertEquals($expect, $actual);
+
+        $f = (new Block)->stmt(Value::as('return'), Value::ugly((new FunctionCall('a'))->arg(1)));
+        $expect = '    return a(1);';
+        $actual = $f->render(true, 1);
+        $this->assertEquals($expect, $actual);
+    }
+
     public function testAssign()
     {
         $v = (new Block)->assign(

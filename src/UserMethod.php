@@ -61,15 +61,12 @@ class UserMethod extends UserFunction
             $indent = 0;
         }
 
-        $ret = parent::render($pretty, $indent);
+        $ret = ltrim(parent::render($pretty, $indent));
         $prefix = $this->visibility . ' ';
         if ($this->static) {
             $prefix .= 'static ';
         }
 
-        if ($pretty and $indent > 0) {
-            $ret = substr($ret, $indent * 4);
-        }
         return str_repeat(' ', $indent * 4) . $prefix . $ret;
     }
 }

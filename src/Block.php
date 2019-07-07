@@ -90,11 +90,7 @@ class Block implements Renderable
                     }
 
                     $arr = array_map(function (Renderable $r) use ($p, $i) {
-                        $ret = $r->render($p, $i);
-                        if ($p and $i > 0) {
-                            $ret = substr($ret, $i * 4);
-                        }
-                        return $ret;
+                        return ltrim($r->render($p, $i));
                     }, $this->r);
 
                     return $str . implode(' ', $arr) . ';';
